@@ -3,6 +3,8 @@ language: java
 jdk:
   - oraclejdk8
 before_install:
+  - sudo apt-get update
+  - sudo apt-get install gfortran
   - wget https://confluence.ecmwf.int/download/attachments/45757960/eccodes-2.16.0-Source.tar.gz
   - tar -xzf  eccodes-2.16.0-Source.tar.gz
   - mkdir build ; cd build

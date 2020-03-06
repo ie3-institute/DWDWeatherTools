@@ -5,4 +5,4 @@
 [![OpenService](https://img.shields.io/badge/Open-Service-ff6600?style=flat)](https://okfn.org/opendata/)
 
 # DWDWeatherTools
-Java command line client to access weather data of the ICON model from the Deutscher Wetterdienst (DWD), the federal meteorological service in Germany
+Java command line client to access weather data of the [ICON-EU](https://www.dwd.de/DE/leistungen/modellvorhersagedaten/modellvorhersagedaten.html) model from the Deutscher Wetterdienst ([DWD](https://www.dwd.de/EN/Home/home_node.html)), the federal meteorological service in Germany

@@ -12,6 +12,7 @@ before_install:
   - sudo env "PATH=$PATH" make
   - sudo env "PATH=$PATH" ctest
   - sudo env "PATH=$PATH" make install
+  - cd ..
 script:
   - chmod -R ug+x .travis
   - .travis/build.sh

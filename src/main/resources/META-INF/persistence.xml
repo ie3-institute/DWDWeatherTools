@@ -1,0 +1,26 @@
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="dwdtools" transaction-type="RESOURCE_LOCAL">
+        <class>edu.ie3.tools.models.persistence.FileModel</class>
+        <class>edu.ie3.tools.models.persistence.AbstractCoordinateModel</class>
+        <class>edu.ie3.tools.models.persistence.CoordinateModel</class>
+        <class>edu.ie3.tools.models.persistence.ICONWeatherModel</class>
+        <properties>
+            <property name="hibernate.default_schema" value="icon"/>
+            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
+            <property name="hibernate.current_session_context_class" value="thread"/>
+            <property name="hibernate.order_updates" value="true"/>
+            <property name="hibernate.order_inserts" value="true"/>
+            <property name="hibernate.connection.release_mode" value="on_close"/>
+            <property name="hibernate.connection.FlushMode" value="manual"/>
+            <property name="hibernate.generate_stastistics" value="true"/>
+            <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+    </persistence-unit>
+</persistence>

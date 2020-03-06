@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%highlight{%5sn %-5p %d{HH:mm:ss}  }{FATAL=red, ERROR=red, WARN=yellow, INFO=black, DEBUG=white, TRACE=white}|  %m%n"/>
+        </Console>
+        <File name="DownloaderLog" fileName="log/Downloader.log" append="true">
+            <PatternLayout pattern="[%5sn] %-5p %d{dd-MM-yyyy HH:mm:ss}  |  %m%n"/>
+        </File>
+        <File name="ConverterLog" fileName="log/Converter.log">
+            <PatternLayout pattern="[%5sn] %-5p %d{dd-MM-yyyy HH:mm:ss}  |  %m%n"/>
+        </File>
+        <File name="DatabaseControllerLog" fileName="log/DatabaseController.log" append="false">
+            <PatternLayout pattern="[%5sn] %-5p %d{dd-MM-yyyy HH:mm:ss}  |  %m%n"/>
+        </File>
+        <File name="ErrorLog" fileName="log/Error.log" append="true">
+            <PatternLayout pattern="[%5sn] %d{dd-MM-yyyy HH:mm:ss} %C{1}.%M:%L  |  %m%n"/>
+        </File>
+        <File name="FileStatusLog" fileName="log/FileStatus.log" append="true">
+            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss} |  %m%n"/>
+        </File>
+    </Appenders>
+
+    <Loggers>
+
+        <logger name="edu.ie3.tools.Converter" level="ALL" additivity="false">
+            <AppenderRef ref="ConverterLog"/>
+            <AppenderRef ref="ErrorLog" level="error"/>
+            <AppenderRef ref="STDOUT"/>
+        </logger>
+        <logger name="edu.ie3.tools.Extractor" level="ALL" additivity="false">
+            <AppenderRef ref="ConverterLog"/>
+            <AppenderRef ref="ErrorLog" level="error"/>
+            <AppenderRef ref="STDOUT"/>
+        </logger>
+        <logger name="edu.ie3.tools.Decompressor" level="ALL" additivity="false">
+            <AppenderRef ref="ConverterLog"/>
+            <AppenderRef ref="ErrorLog" level="error"/>
+            <AppenderRef ref="STDOUT"/>
+        </logger>
+        <logger name="edu.ie3.tools.utils.DatabaseController" level="ALL" additivity="false">
+            <AppenderRef ref="DatabaseControllerLog"/>
+            <AppenderRef ref="ErrorLog" level="error"/>
+            <AppenderRef ref="STDOUT"/>
+        </logger>
+        <logger name="edu.ie3.tools.Downloader" level="ALL" additivity="false">
+            <AppenderRef ref="DownloaderLog"/>
+            <AppenderRef ref="ErrorLog" level="error"/>
+            <AppenderRef ref="STDOUT"/>
+        </logger>
+        <logger name="FileStatus" level="ALL" additivity="false">
+            <AppenderRef ref="FileStatusLog"/>
+        </logger>
+        <Root level="ALL">
+        </Root>
+    </Loggers>
+</Configuration>
+

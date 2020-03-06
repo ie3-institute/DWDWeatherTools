@@ -1,0 +1,14 @@
+SELECT String_agg(coordInfo, ', ')
+FROM
+
+(SELECT '(' || id || ', ' || latitude || ', ' || longitude || ', "' || coordinate_type || '")' as coordInfo, (CASE 
+			WHEN id BETWEEN 0 AND 100000 THEN 1
+			WHEN id BETWEEN 100000 AND 200000 THEN 2
+			WHEN id BETWEEN 200000 AND 300000 THEN 3
+			WHEN id BETWEEN 300000 AND 400000 THEN 4
+			WHEN id BETWEEN 400000 AND 500000 THEN 5
+			WHEN id BETWEEN 500000 AND 600000 THEN 6
+			WHEN id > 600000 THEN 7
+            ELSE 8
+       END) as num FROM icon_coordinates) as c
+group by num

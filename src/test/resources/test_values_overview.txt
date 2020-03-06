@@ -1,0 +1,35 @@
+Chosen coordinate_ids:
+id	    lat		    lon		    grep                        kind
+227670	45.75		4.312		grep "45.750    4.312"		min
+304736	57.625		18.938		grep "57.625   18.938"		max	
+216196	51.688		11.625      grep "51.688   11.625"		avg
+
+
+icon-eu_europe_regular-lat-lon_model-level_2018031417_042_60_U.grib2    
+227670		2.7225494385e-02
+304736		7.0867958069e+00
+216196		9.8132705688e-01
+
+
+icon-eu_europe_regular-lat-lon_single-level_2018031417_042_U_10M.grib2   (gleich, da gleiche Datei :D)
+227670		2.7225494385e-02
+304736		7.0867958069e+00
+216196		9.8132705688e-01
+
+icon-eu_europe_regular-lat-lon_single-level_2019082300_003_Z0.grib2
+227670		1.0629452213e-01
+304736		7.8091463365e-05
+216196		8.4794888338e-02
+
+
+icon-eu_europe_regular-lat-lon_single-level_2019082303_000_Z0.grib2
+227670		1.0629452213e-01
+304736		1.0860904149e-04
+216196		8.4794888338e-02
+
+
+icon-eu_europe_regular-lat-lon_single-level_2019082303_001_Z0.grib2
+227670		1.0629452213e-01
+304736		1.0860904149e-04
+216196		8.4794888338e-02
+

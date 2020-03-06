@@ -5,9 +5,16 @@ jdk:
 before_install:
   - sudo apt-get update
   - sudo apt-get install gfortran
+  - wget https://confluence.ecmwf.int/download/attachments/45757960/eccodes-2.16.0-Source.tar.gz
+  - tar -xzf  eccodes-2.16.0-Source.tar.gz
+  - mkdir build ; cd build
+  - sudo env "PATH=$PATH" cmake -DCMAKE_INSTALL_PREFIX=/usr/bin/grib_get_data ../eccodes-2.16.0-Source
+  - sudo env "PATH=$PATH" make
+  - sudo env "PATH=$PATH" ctest
+  - sudo env "PATH=$PATH" make install
+  - cd ..
 script:
   - chmod -R ug+x .travis
-  - .travis/eccodes.sh
   - .travis/build.sh
 notifications:
   webhooks: https://simona.ie3.e-technik.tu-dortmund.de/chat/hooks/RtG988s8R4iY3vM32/6JNKKYCwq9DYbqWgkFBmmdzRiAHvXAgLQeNyWNKnfWyjvHR3

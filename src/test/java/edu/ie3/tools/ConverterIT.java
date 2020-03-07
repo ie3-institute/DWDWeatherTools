@@ -77,33 +77,31 @@ public class ConverterIT {
   }
 
   @ClassRule
-  public static PostgreSQLContainer postgres =
+  public static final PostgreSQLContainer postgres =
       new PostgreSQLContainer("postgres:11.4-alpine").withDatabaseName("test");
 
   @BeforeClass
   public static void setUp() throws Exception {
-    setDatabaseDockerContainerUp();
-    setFilesUp();
-
-    Converter converter = new Converter();
     Main.connectionUrl = postgres.getJdbcUrl();
     Main.databaseUser = postgres.getUsername();
     Main.databasePassword = postgres.getPassword();
     Main.debug = true;
     Main.deleteDownloadedFiles = true;
+
+    setDatabaseDockerContainerUp(Main.connectionUrl, Main.databaseUser, Main.databasePassword);
+    setFilesUp();
+
+    Converter converter = new Converter();
     converter.run();
   }
 
-  public static void setDatabaseDockerContainerUp() throws SQLException, IOException {
-    Main.connectionUrl = postgres.getJdbcUrl();
-    Main.databaseUser = postgres.getUsername();
-    Main.databasePassword = postgres.getPassword();
+  public static void setDatabaseDockerContainerUp(String connectionUrl, String databaseUser, String databasePassword) throws SQLException, IOException {
     postgres.start();
-    System.out.println("Connected to Docker Container: " + Main.connectionUrl);
+    System.out.println("Connected to Docker Container: " + connectionUrl);
     File file = new File(resourcesPath + "sql" + File.separator + "initDatabase.sql");
     String initDatabase = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
     Connection connect =
-        DriverManager.getConnection(Main.connectionUrl, Main.databaseUser, Main.databasePassword);
+        DriverManager.getConnection(connectionUrl, databaseUser,databasePassword);
     Statement statement = connect.createStatement();
     statement.execute(initDatabase);
     statement.closeOnCompletion();

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%highlight{%5sn %-5p %d{HH:mm:ss}  }{FATAL=red, ERROR=red, WARN=yellow, INFO=black, DEBUG=white, TRACE=white}|  %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+
+        <logger name="edu.ie3.tools.Converter" level="ALL" additivity="false">
+            <AppenderRef ref="STDOUT" level="INFO"/>
+        </logger>
+        <logger name="edu.ie3.tools.Extractor" level="ALL" additivity="false">
+            <AppenderRef ref="STDOUT" level="INFO"/>
+        </logger>
+        <logger name="edu.ie3.tools.Decompressor" level="ALL" additivity="false">
+            <AppenderRef ref="STDOUT" level="INFO"/>
+        </logger>
+        <logger name="edu.ie3.tools.utils.DatabaseController" level="ALL" additivity="false">
+            <AppenderRef ref="STDOUT" level="INFO"/>
+        </logger>
+        <logger name="edu.ie3.tools.Downloader" level="ALL" additivity="false">
+            <AppenderRef ref="STDOUT" level="INFO"/>
+        </logger>
+        <Root level="ALL">
+            <AppenderRef ref="STDOUT" level="INFO"/>
+        </Root>
+    </Loggers>
+</Configuration>
+

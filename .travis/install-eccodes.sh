@@ -15,3 +15,6 @@ sudo env "PATH=$PATH" make install
 
 # leave the eccodes-build dir
 cd ..
+
+# delete the folder to prevent spotless to check for valid file syntax in these folders
+sudo rm -rf eccodes-build eccodes-2.16.0-Source

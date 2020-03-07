@@ -132,7 +132,8 @@ public class Converter implements Runnable {
                   + MODEL_RUN_FORMATTER.format(currentModelrun)
                   + " ###############################");
           formattedModelrun = getFormattedModelrun(currentModelrun);
-          long tic, toc;
+          long tic;
+          long toc;
           tic = System.currentTimeMillis();
           for (int timestep = 0; timestep < edu.ie3.tools.Main.timesteps; timestep++) {
             handleTimestep(currentModelrun, timestep);
@@ -232,10 +233,7 @@ public class Converter implements Runnable {
    */
   public void convertTimeStep(ZonedDateTime modelrun, int timestep) {
     String folderPath =
-        edu.ie3.tools.Main.directory
-            + File.separator
-            + FILENAME_DATE_FORMATTER.format(modelrun)
-            + File.separator;
+        Main.directory + File.separator + FILENAME_DATE_FORMATTER.format(modelrun) + File.separator;
     convertTimeStep(modelrun, timestep, folderPath);
   }
 

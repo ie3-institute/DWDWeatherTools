@@ -9,7 +9,6 @@ package edu.ie3.tools;
 import static edu.ie3.tools.utils.ConfigurationParameters.*;
 
 import edu.ie3.tools.models.persistence.FileModel;
-import edu.ie3.tools.utils.ConfigurationParameters;
 import edu.ie3.tools.utils.DatabaseController;
 import edu.ie3.tools.utils.enums.Parameter;
 import java.io.File;
@@ -93,9 +92,7 @@ public class Downloader implements Runnable {
         ZonedDateTime modelrun = file.getModelrun();
         if (modelrun.isAfter(newestDateDownloaded)) {
           newestDateDownloaded = modelrun;
-          logger.info(
-              "Current Modelrun: "
-                  + ConfigurationParameters.MODEL_RUN_FORMATTER.format(newestDateDownloaded));
+          logger.info("Current Modelrun: " + MODEL_RUN_FORMATTER.format(newestDateDownloaded));
         }
         String folder = Main.directory + File.separator + FILENAME_DATE_FORMATTER.format(modelrun);
         File dayFolder = new File(folder);

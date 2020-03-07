@@ -61,9 +61,9 @@ public class DatabaseController {
       Callable<Void> jdbcUpsertTask =
           jdbcUpsertCallable(
               entities.subList(i, Math.min(i + 500, entities.size())),
-              edu.ie3.tools.Main.connectionUrl,
-              edu.ie3.tools.Main.databaseUser,
-              edu.ie3.tools.Main.databasePassword);
+              Main.connectionUrl,
+              Main.databaseUser,
+              Main.databasePassword);
       tasks.add(jdbcUpsertTask);
     }
 

@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * @since 01.09.2017
  */
 public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
-  final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:00");
+  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:00");
 
   @Override
   public String marshal(ZonedDateTime date) {

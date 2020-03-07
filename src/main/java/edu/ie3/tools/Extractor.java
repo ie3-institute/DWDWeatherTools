@@ -110,6 +110,7 @@ public class Extractor implements Callable<ExtractorResult> {
   }
 
   private String gribGetDataCommand(String filepath) {
+    System.out.println(eccodesLocation + " -m " + Main.missingValue + " " + filepath);
     return eccodesLocation + " -m " + Main.missingValue + " " + filepath;
   }
 

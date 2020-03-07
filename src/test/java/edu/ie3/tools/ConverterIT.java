@@ -95,13 +95,14 @@ public class ConverterIT {
     converter.run();
   }
 
-  public static void setDatabaseDockerContainerUp(String connectionUrl, String databaseUser, String databasePassword) throws SQLException, IOException {
+  public static void setDatabaseDockerContainerUp(
+      String connectionUrl, String databaseUser, String databasePassword)
+      throws SQLException, IOException {
     postgres.start();
     System.out.println("Connected to Docker Container: " + connectionUrl);
     File file = new File(resourcesPath + "sql" + File.separator + "initDatabase.sql");
     String initDatabase = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-    Connection connect =
-        DriverManager.getConnection(connectionUrl, databaseUser,databasePassword);
+    Connection connect = DriverManager.getConnection(connectionUrl, databaseUser, databasePassword);
     Statement statement = connect.createStatement();
     statement.execute(initDatabase);
     statement.closeOnCompletion();

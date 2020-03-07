@@ -4,7 +4,7 @@ chmod u+x gradlew
 if [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ];
 then
     echo "Merge PR into master. Calling all tests + creating reports."
-    ./gradlew --refresh-dependencies --stacktrace clean spotlessCheck pmdMain pmdTest spotbugsMain spotbugsTest allTests jacocoTestReport jacocoTestCoverageVerification
+    ./gradlew --refresh-dependencies clean spotlessCheck pmdMain pmdTest spotbugsMain spotbugsTest allTests jacocoTestReport jacocoTestCoverageVerification
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
     echo "Building PR $TRAVIS_PULL_REQUEST."

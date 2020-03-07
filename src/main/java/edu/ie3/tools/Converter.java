@@ -164,7 +164,7 @@ public class Converter implements Runnable {
     logger.info(
         formattedTimestep + "Opening of archive files finished (" + (toc - tic) / 1000 + "s)");
 
-    convertTimestep(currentModelrun, timestep);
+    convertTimeStep(currentModelrun, timestep);
 
     logger.info(formattedTimestep + "Timestep finished");
   }
@@ -183,8 +183,7 @@ public class Converter implements Runnable {
               FileModel.class, FileModel.createFileName(currentModelrun, timestep, param));
       if (file != null) {
         files.add(file);
-        if (file.isSufficient_size()
-            && (file.isValid_file() == null || file.isValid_file() == true)) {
+        if (file.isSufficient_size() && (file.isValid_file() == null || file.isValid_file())) {
           if (!file.isPersisted() && !file.isArchivefile_deleted() && !file.isDecompressed()) {
             tasks.add(new Decompressor(file, folderpath));
           }
@@ -213,7 +212,7 @@ public class Converter implements Runnable {
     }
     files.forEach(
         file -> {
-          if (file.isDecompressed() && (file.isValid_file() == null || file.isValid_file() == true))
+          if (file.isDecompressed() && (file.isValid_file() == null || file.isValid_file()))
             parameterLevelToFile.put(file.getParameter(), file);
           else {
             file.setValid_file(false);
@@ -224,20 +223,20 @@ public class Converter implements Runnable {
   }
 
   /**
-   * Calls {@link Converter#convertTimestep(ZonedDateTime, int, String)} with default folderpath
+   * Calls {@link Converter#convertTimeStep(ZonedDateTime, int, String)} with default folderpath
    * <br>
    * Extracts values from the previously decompressed archive files into {@link ICONWeatherModel
    * WeatherPreparationModels} and persists them. <br>
    * Marks status as persisted, if more than 50% of values could be extracted. <br>
    * Deletes files using {@link FileEraser#eraseCallable(FileModel)} after completion.
    */
-  public void convertTimestep(ZonedDateTime modelrun, int timestep) {
-    String folderpath =
+  public void convertTimeStep(ZonedDateTime modelrun, int timestep) {
+    String folderPath =
         edu.ie3.tools.Main.directory
             + File.separator
             + FILENAME_DATE_FORMATTER.format(modelrun)
             + File.separator;
-    convertTimestep(modelrun, timestep, folderpath);
+    convertTimeStep(modelrun, timestep, folderPath);
   }
 
   /**
@@ -246,18 +245,18 @@ public class Converter implements Runnable {
    * Marks status as persisted, if more than 50% of values could be extracted. <br>
    * Deletes files using {@link FileEraser#eraseCallable(FileModel)} after completion.
    */
-  public void convertTimestep(ZonedDateTime modelrun, int timestep, String folderpath) {
-    String formattedTimestep = getFormattedTimestep(modelrun, timestep);
+  public void convertTimeStep(ZonedDateTime modelRun, int timeStep, String folderPath) {
+    String formattedTimeStep = getFormattedTimestep(modelRun, timeStep);
 
-    // Skip timestep if no file could be decompressed
+    // Skip timeStep if no file could be decompressed
     HashSet params = new HashSet(parameterLevelToFile.keySet());
     if (params.isEmpty()) {
-      logger.debug(formattedTimestep + "Skipped");
+      logger.debug(formattedTimeStep + "Skipped");
       return;
     }
 
-    logger.info(formattedTimestep + "Parsing files");
-    final ZonedDateTime date = modelrun.plusHours(timestep);
+    logger.info(formattedTimeStep + "Parsing files");
+    final ZonedDateTime date = modelRun.plusHours(timeStep);
     long tic, toc;
     tic = System.currentTimeMillis();
 
@@ -271,7 +270,7 @@ public class Converter implements Runnable {
         new ExecutorCompletionService<>(parsingExecutor);
 
     for (FileModel file : parameterLevelToFile.values()) {
-      completionService.submit(new Extractor(folderpath, file, coordinates, Main.eccodes));
+      completionService.submit(new Extractor(folderPath, file, coordinates, Main.eccodes));
     }
 
     int received = 0;
@@ -324,39 +323,39 @@ public class Converter implements Runnable {
                         }));
 
     toc = System.currentTimeMillis();
-    logger.info(formattedTimestep + "Parsing completed (" + (toc - tic) / 1000 + "s)");
+    logger.info(formattedTimeStep + "Parsing completed (" + (toc - tic) / 1000 + "s)");
 
     if (!newValues.get() || errors) {
       logger.warn(
-          formattedTimestep
+          formattedTimeStep
               + "Could not parse any new values or an error occurred during parsing (maybe the files are missing?). Skipped.");
       dbController.renewManager();
       return;
     }
 
-    logger.info(formattedTimestep + "Checking for previous entries ...");
+    logger.info(formattedTimeStep + "Checking for previous entries ...");
     tic = System.currentTimeMillis();
     entities = checkForPreviousEntries(entities);
     toc = System.currentTimeMillis();
-    logger.info(formattedTimestep + "Checking done (" + (toc - tic) / 1000 + "s)");
-    logger.info(formattedTimestep + "Persisting entities ...");
+    logger.info(formattedTimeStep + "Checking done (" + (toc - tic) / 1000 + "s)");
+    logger.info(formattedTimeStep + "Persisting entities ...");
     tic = System.currentTimeMillis();
     dbController.jdbcUpsert(entities);
     toc = System.currentTimeMillis();
-    logger.info(formattedTimestep + "Persisted all entities (" + (toc - tic) / 1000 + "s)");
+    logger.info(formattedTimeStep + "Persisted all entities (" + (toc - tic) / 1000 + "s)");
 
-    logger.info(formattedTimestep + "Starting validation ...");
+    logger.info(formattedTimeStep + "Starting validation ...");
     tic = System.currentTimeMillis();
     validation();
     toc = System.currentTimeMillis();
-    logger.info(formattedTimestep + "Validation complete (" + (toc - tic) / 1000 + "s)");
+    logger.info(formattedTimeStep + "Validation complete (" + (toc - tic) / 1000 + "s)");
 
-    logger.info(formattedTimestep + "Renewing database connection ...");
+    logger.info(formattedTimeStep + "Renewing database connection ...");
     tic = System.currentTimeMillis();
     dbController.renewManager();
     toc = System.currentTimeMillis();
     logger.info(
-        formattedTimestep
+        formattedTimeStep
             + "Database connection successfully renewed ("
             + (toc - tic) / 1000
             + "s)");

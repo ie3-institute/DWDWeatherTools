@@ -58,8 +58,8 @@ public class FileEraser {
 
     // delete grib file
     if (file.isPersisted()
-        || (file.isValid_file() != null && file.isValid_file() != true)
-        || file.isSufficient_size() == false) {
+        || (file.isValid_file() != null && !file.isValid_file())
+        || !file.isSufficient_size()) {
       String filename = file.getGRIB2FileName();
       file.setGribfile_deleted(eraseFile(fullDirectoryPath + filename));
       filestatusLogger.trace(

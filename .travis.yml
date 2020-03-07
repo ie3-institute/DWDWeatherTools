@@ -6,8 +6,8 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install gfortran
   - .travis/install-eccodes.sh
-  - grib_get_data
-  - /usr/bin/grib_get_data
+  - which grib_get_data
+  - /usr/local/bin/grib_get_data
 script:
   - chmod -R ug+x .travis
   - .travis/build.sh

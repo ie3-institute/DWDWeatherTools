@@ -101,7 +101,7 @@ public class Main {
   @CommandLine.Option(
       names = {"-eccodes", "--eccodes_location"},
       description = "The location of the eccodes commands")
-  public static String eccodes = "/usr/bin/grib_get_data";
+  public static String eccodes = "/usr/local/bin/grib_get_data";
 
   @CommandLine.Option(
       names = {"-filestatus"},

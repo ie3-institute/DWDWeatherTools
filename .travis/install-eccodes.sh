@@ -8,7 +8,7 @@ tar -xzf  eccodes-2.16.0-Source.tar.gz
 mkdir eccodes-build ; cd eccodes-build
 
 # compile and install eccodes
-sudo env "PATH=$PATH" cmake -DCMAKE_INSTALL_PREFIX=/usr/bin/grib_get_data ../eccodes-2.16.0-Source
+sudo env "PATH=$PATH" cmake -DCMAKE_INSTALL_PREFIX=/usr/local ../eccodes-2.16.0-Source
 sudo env "PATH=$PATH" make
 sudo env "PATH=$PATH" ctest
 sudo env "PATH=$PATH" make install

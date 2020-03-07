@@ -21,8 +21,3 @@ spotless {
 		endWithNewline()
 	}
 }
-
-//have spotless format code before compilation
-compileJava {
-	dependsOn 'spotlessApply'
-}

@@ -42,12 +42,6 @@ public class ExtractorTest {
 
   @BeforeClass
   public static void setUp() throws IOException {
-    System.out.println(resourcesPath);
-    System.out.println(new File(
-                    resourcesPath
-                    + "testFiles"
-                    + File.separator
-                    + "icon-eu_europe_regular-lat-lon_model-level_2018031417_042_60_U.grib2").exists());
     File extractorFiles = new File(extractorPath);
     extractorFiles.mkdirs();
     FileUtils.copyFile(

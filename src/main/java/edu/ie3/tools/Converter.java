@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Converter implements Runnable {
   public static final Logger logger = LogManager.getLogger(Converter.class);
-  public static final Logger filestatusLogger = LogManager.getLogger("FileStatus");
+  public static final Logger fileStatusLogger = LogManager.getLogger("FileStatus");
 
   private FileEraser fileEraser;
   private Collection<CoordinateModel> coordinates;
@@ -71,7 +71,7 @@ public class Converter implements Runnable {
   @Override
   public void run() {
     if (acquireLock()) {
-      filestatusLogger.setLevel(Main.filestatus ? Level.ALL : Level.OFF);
+      fileStatusLogger.setLevel(Main.filestatus ? Level.ALL : Level.OFF);
       logger.setLevel(Main.debug ? Level.ALL : Level.INFO);
       printInit();
       validateConnectionProperties();
@@ -216,7 +216,7 @@ public class Converter implements Runnable {
             parameterLevelToFile.put(file.getParameter(), file);
           else {
             file.setValid_file(false);
-            filestatusLogger.trace(
+            fileStatusLogger.trace(
                 file.getName() + "  |  vff  |  valid_file = false  | Decompression failed");
           }
         });
@@ -293,7 +293,7 @@ public class Converter implements Runnable {
         // update the file model information about the validity of the extractor result
         FileModel file = parameterLevelToFile.get(extractorResult.getParameter());
         file.setValid_file(extractorResult.isValidFile());
-        filestatusLogger.trace(
+        fileStatusLogger.trace(
             file.getName()
                 + (Boolean.TRUE.equals(file.isValid_file())
                     ? "  |  vft  |  valid_file = true  | Extraction"
@@ -372,7 +372,7 @@ public class Converter implements Runnable {
           ((double) file.getMissing_coordinates()) / coordinates.size();
       if (relAmountMissingCoordinates < edu.ie3.tools.Main.faultTolerance) {
         file.setPersisted(true);
-        filestatusLogger.trace(file.getName() + "  |  pf   |  persisted = true  |  Validation");
+        fileStatusLogger.trace(file.getName() + "  |  pf   |  persisted = true  |  Validation");
       } else {
         logger.info(
             getFormattedTimestep(file)

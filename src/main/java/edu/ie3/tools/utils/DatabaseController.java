@@ -21,7 +21,6 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -274,38 +273,6 @@ public class DatabaseController {
       logger.error(ex);
     }
     manager.joinTransaction();
-  }
-
-  public void persist(Collection<? extends Serializable> entities) {
-    EntityTransaction transaction = null;
-    try {
-      transaction = manager.getTransaction();
-      if (!transaction.isActive()) transaction.begin();
-
-      for (Serializable entity : entities) manager.persist(entity);
-
-      transaction.commit();
-    } catch (Exception ex) {
-      // If there are any exceptions, roll back the changes
-      if (transaction != null) {
-        transaction.rollback();
-      }
-      logger.error(ex);
-    }
-  }
-
-  public <C extends Serializable> List<C> readAll(Class<C> entityClass) {
-    List<C> entities = null;
-    //        EntityManager manager = factory.createEntityManager();
-    try {
-      CriteriaQuery<C> criteria = builder.createQuery(entityClass);
-      criteria.select(criteria.from(entityClass));
-      entities = manager.createQuery(criteria).getResultList();
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      logger.error(ex.getMessage());
-    }
-    return entities;
   }
 
   public <C extends Serializable> C find(Class<C> clazz, Object id) {

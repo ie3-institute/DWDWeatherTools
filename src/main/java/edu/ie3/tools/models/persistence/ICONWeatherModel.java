@@ -753,6 +753,22 @@ public class ICONWeatherModel implements Serializable {
     return insertValues;
   }
 
+  /**
+   * Get String for an prepared statement, possibly postgres specific <br>
+   * refer to:
+   * https://stackoverflow.com/questions/3107044/preparedstatement-with-list-of-parameters-in-a-in-clause
+   */
+  public static String getPSQLFindString(String database_schema) {
+    String query =
+        "SELECT * FROM "
+            + database_schema
+            + ".weather w JOIN "
+            + database_schema
+            + ".icon_coordinates c ON w.coordinate_id = c.id "
+            + "WHERE datum=? AND coordinate_id = ANY(?);";
+    return query;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

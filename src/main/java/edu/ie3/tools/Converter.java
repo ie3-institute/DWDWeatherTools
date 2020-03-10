@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -401,8 +402,25 @@ public class Converter implements Runnable {
   /** Checks for previous entries for all given entities and interpolates them */
   private List<ICONWeatherModel> checkForPreviousEntries(List<ICONWeatherModel> entities) {
     LinkedList<ICONWeatherModel> checkedEntities = new LinkedList<>();
+    Map<ZonedDateTime, List<ICONWeatherModel>> entitiesByDate =
+        entities.stream().collect(Collectors.groupingBy(ICONWeatherModel::getDate));
+    entitiesByDate.forEach(
+        (date, entitiesAtDate) ->
+            checkedEntities.addAll(checkForPreviousEntries(entitiesAtDate, date)));
+    return checkedEntities;
+  }
+
+  @NotNull
+  /** Checks for previous entries for all given entities and interpolates them */
+  private List<ICONWeatherModel> checkForPreviousEntries(
+      List<ICONWeatherModel> entities, ZonedDateTime date) {
+    Map<Integer, ICONWeatherModel> foundEntities =
+        dbController.jdbcFindWeather(
+            entities.stream().map(w -> w.getCoordinate().getId()).collect(Collectors.toList()),
+            date);
+    LinkedList<ICONWeatherModel> checkedEntities = new LinkedList<>();
     for (ICONWeatherModel entity : entities) {
-      ICONWeatherModel foundWeather = dbController.find(ICONWeatherModel.class, entity.getKey());
+      ICONWeatherModel foundWeather = foundEntities.get(entity.getCoordinate().getId());
       if (foundWeather != null) {
         foundWeather.interpolateValues(entity, Main.interpolationRatio);
         checkedEntities.add(foundWeather);

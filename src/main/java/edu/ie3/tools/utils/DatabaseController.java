@@ -7,14 +7,18 @@
 package edu.ie3.tools.utils;
 
 import edu.ie3.tools.Main;
+import edu.ie3.tools.models.enums.CoordinateType;
+import edu.ie3.tools.models.persistence.CoordinateModel;
 import edu.ie3.tools.models.persistence.ICONWeatherModel;
+import edu.ie3.tools.utils.enums.Parameter;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,7 +30,7 @@ public class DatabaseController {
 
   public static final Logger logger = LogManager.getLogger(DatabaseController.class);
 
-  private final ExecutorService jdbcUpsertExecutor =
+  private final ExecutorService jdbcExecutor =
       Executors.newFixedThreadPool(
           (int) Math.ceil(Runtime.getRuntime().availableProcessors() / 3d));
 
@@ -69,7 +73,7 @@ public class DatabaseController {
     }
 
     try {
-      jdbcUpsertExecutor.invokeAll(tasks);
+      jdbcExecutor.invokeAll(tasks);
     } catch (InterruptedException e) {
       logger.error("Error during jdbcUpsert for existing entities: {}", e);
       Thread.currentThread().interrupt();
@@ -121,6 +125,122 @@ public class DatabaseController {
         // execute the database command
         jdbcUpsert(upsertStatement, connectionUrl, user, password);
         return null;
+      }
+    };
+  }
+
+  public Map<Integer, ICONWeatherModel> jdbcFindWeather(
+      List<Integer> coordinateIds, ZonedDateTime date) {
+
+    List<Callable<Map<Integer, ICONWeatherModel>>> tasks = new ArrayList<>();
+
+    for (int i = 0; i <= coordinateIds.size(); i += 500) {
+      Callable<Map<Integer, ICONWeatherModel>> jdbcFindWeatherTask =
+          jdbcFindWeatherCallable(
+              coordinateIds.subList(i, Math.min(i + 500, coordinateIds.size())),
+              date,
+              Main.connectionUrl,
+              Main.databaseUser,
+              Main.databasePassword);
+      tasks.add(jdbcFindWeatherTask);
+    }
+
+    HashMap<Integer, ICONWeatherModel> coordinateIdToWeather = new HashMap<>();
+    List<Future<Map<Integer, ICONWeatherModel>>> futureMaps = Collections.emptyList();
+    try {
+      futureMaps = jdbcExecutor.invokeAll(tasks);
+    } catch (InterruptedException e) {
+      logger.error("Error during jdbc weather lookup: {}", e);
+      Thread.currentThread().interrupt();
+    }
+    for (Future<Map<Integer, ICONWeatherModel>> futureMap : futureMaps) {
+      try {
+        Map<Integer, ICONWeatherModel> result = futureMap.get();
+        coordinateIdToWeather.putAll(result);
+      } catch (InterruptedException | ExecutionException e) {
+        logger.error("Error during jdbc weather lookup: {}", e);
+        Thread.currentThread().interrupt();
+      }
+    }
+    return coordinateIdToWeather;
+  }
+
+  private Callable<Map<Integer, ICONWeatherModel>> jdbcFindWeatherCallable(
+      final List<Integer> coordinateIds,
+      final ZonedDateTime date,
+      final String connectionUrl,
+      final String user,
+      final String password) {
+    return new Callable<Map<Integer, ICONWeatherModel>>() {
+
+      private Collection<ICONWeatherModel> jdbcFindWeather(
+          List<Integer> coordinateIds,
+          ZonedDateTime date,
+          String connectionUrl,
+          String user,
+          String password) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rs;
+        Collection<ICONWeatherModel> weatherEntities = new LinkedList<>();
+        try {
+          connection = DriverManager.getConnection(connectionUrl, user, password);
+          statement =
+              connection.prepareStatement(ICONWeatherModel.getPSQLFindString(Main.database_schema));
+          Array coordinateIdArray =
+              statement.getConnection().createArrayOf("INTEGER", coordinateIds.toArray());
+          Timestamp timestamp = Timestamp.valueOf(LocalDateTime.from(date));
+          statement.setTimestamp(1, timestamp);
+          statement.setArray(2, coordinateIdArray);
+          rs = statement.executeQuery();
+          while (rs.next()) {
+            CoordinateModel coordinateModel = new CoordinateModel(rs.getInt("coordinate_id"));
+            coordinateModel.setCoordinate_type(
+                CoordinateType.valueOf(rs.getString("coordinate_type")));
+            coordinateModel.setLatitude(rs.getDouble("latitude"));
+            coordinateModel.setLongitude(rs.getDouble("longitude"));
+            ICONWeatherModel weather =
+                new ICONWeatherModel(
+                    ZonedDateTime.of(rs.getTimestamp("datum").toLocalDateTime(), ZoneId.of("UTC")),
+                    coordinateModel);
+
+            for (Parameter parameter : Parameter.values()) {
+              String columnName = parameter.toString().toLowerCase();
+              Double paramToBeSet =
+                  rs.getBigDecimal(columnName) == null
+                      ? null
+                      : rs.getBigDecimal(columnName).doubleValue();
+              weather.setParameter(parameter, paramToBeSet);
+            }
+            weatherEntities.add(weather);
+          }
+        } catch (SQLException e) {
+          logger.error("Exception occurred during PSQL find weather query execution: {}", e);
+        } finally {
+          if (statement != null) {
+            try {
+              statement.closeOnCompletion();
+            } catch (SQLException e) {
+              logger.error("Exception occurred while closing find weather query statement: {}", e);
+            }
+          }
+          if (connection != null) {
+            try {
+              connection.close();
+            } catch (SQLException e) {
+              logger.error("Exception occurred while closing find weather query connection: {}", e);
+            }
+          }
+        }
+        return weatherEntities;
+      }
+
+      @Override
+      public Map<Integer, ICONWeatherModel> call() throws Exception {
+        Collection<ICONWeatherModel> weatherEntities =
+            jdbcFindWeather(coordinateIds, date, connectionUrl, user, password);
+        return weatherEntities.stream()
+            .collect(Collectors.toMap(w -> w.getCoordinate().getId(), w -> w));
       }
     };
   }
@@ -193,7 +313,9 @@ public class DatabaseController {
     try {
       entity = manager.find(clazz, id);
     } catch (Exception ex) {
-      logger.error(ex);
+      logger.error(
+          "Errors while finding " + clazz.getSimpleName() + " with id " + id + "using Hibernate: ",
+          ex);
       manager.flush();
     }
     return entity;
@@ -210,7 +332,7 @@ public class DatabaseController {
       }
       objs = query.getResultList();
     } catch (Exception ex) {
-      logger.error(ex);
+      logger.error("Errors while executing NamedQuery " + queryName + ": ", ex);
     }
     return objs;
   }
@@ -256,12 +378,12 @@ public class DatabaseController {
 
     // jdbcUpsert executor
     try {
-      jdbcUpsertExecutor.shutdown();
-      jdbcUpsertExecutor.awaitTermination(1, TimeUnit.MINUTES);
+      jdbcExecutor.shutdown();
+      jdbcExecutor.awaitTermination(1, TimeUnit.MINUTES);
     } catch (InterruptedException ignored) {
       Thread.currentThread().interrupt();
     } finally {
-      jdbcUpsertExecutor.shutdownNow();
+      jdbcExecutor.shutdownNow();
     }
   }
 

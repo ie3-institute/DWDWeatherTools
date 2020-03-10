@@ -27,7 +27,7 @@ public class DatabaseController {
   public static final Logger logger = LogManager.getLogger(DatabaseController.class);
 
   private final ExecutorService jdbcUpsertExecutor =
-      Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() / 3);
+      Executors.newFixedThreadPool((int)Math.ceil(Runtime.getRuntime().availableProcessors() / 3d));
 
   private final String persistence_unit_name;
   private EntityManagerFactory factory;

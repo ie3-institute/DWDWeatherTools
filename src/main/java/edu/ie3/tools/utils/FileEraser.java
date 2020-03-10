@@ -11,8 +11,6 @@ import static edu.ie3.tools.utils.ConfigurationParameters.FILENAME_DATE_FORMATTE
 import edu.ie3.tools.Main;
 import edu.ie3.tools.models.persistence.FileModel;
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.Callable;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -80,19 +78,5 @@ public class FileEraser {
     if (f.exists()) {
       return f.delete();
     } else return true;
-  }
-
-  public int eraseInvalidFiles() {
-    List<FileModel> files =
-        dbController.execNamedQuery(FileModel.InvalidFiles, Collections.emptyList());
-    int deleted = 0;
-    for (FileModel file : files) {
-      String filename = file.getName();
-      String modelrunFolderPath =
-          FILENAME_DATE_FORMATTER.format(file.getModelrun()) + File.separator;
-      String fullDirectoryPath = folderpath + modelrunFolderPath;
-      if (eraseFile(fullDirectoryPath + filename)) deleted++;
-    }
-    return deleted;
   }
 }

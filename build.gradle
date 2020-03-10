@@ -23,7 +23,7 @@ ext {
 }
 
 group = 'com.github.ie3-institute'
-version = '0.4.3'
+version = '0.4.4'
 description = 'DWDWeatherTools'
 defaultTasks 'build'
 sourceCompatibility = javaVersion

@@ -24,7 +24,7 @@ def sonarqubeProjectKey = "edu.ie3:dwdtools"
 
 //// git webhook trigger token
 //// http://JENKINS_URL/generic-webhook-trigger/invoke?token=<webhookTriggerToken>
-webhookTriggerToken = "b0ba1564ca8c4d12ffun639b160d2ek6h9bauhk86"
+webhookTriggerToken = "3b7bc553-d596-48d1-beb1-7b07d2b00bd9"
 
 //// internal jenkins credentials link for git ssh keys
 //// requires the ssh key to be stored in the internal jenkins credentials keystore

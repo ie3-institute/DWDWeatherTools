@@ -96,6 +96,10 @@ public class Converter implements Runnable {
       receivedProperties.setProperty(
           "javax.persistence.jdbc.password", edu.ie3.tools.Main.databasePassword);
 
+    if (!edu.ie3.tools.Main.database_schema.equals("icon"))
+      receivedProperties.setProperty(
+          "hibernate.default_schema", edu.ie3.tools.Main.database_schema);
+
     dbController = new DatabaseController(PERSISTENCE_UNIT_NAME, receivedProperties);
   }
 

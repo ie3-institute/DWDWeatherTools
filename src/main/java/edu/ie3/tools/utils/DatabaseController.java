@@ -281,7 +281,7 @@ public class DatabaseController {
       entity = manager.find(clazz, id);
     } catch (Exception ex) {
       logger.error(
-          "Errors while finding " + clazz.getSimpleName() + " with id " + id + "using Hibernate: ",
+          "Errors while finding " + clazz.getSimpleName() + " with id " + id + " using Hibernate: ",
           ex);
       manager.flush();
     }

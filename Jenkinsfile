@@ -28,7 +28,7 @@ webhookTriggerToken = "3b7bc553-d596-48d1-beb1-7b07d2b00bd9"
 
 //// internal jenkins credentials link for git ssh keys
 //// requires the ssh key to be stored in the internal jenkins credentials keystore
-def sshCredentialsId = "5470eb14-b7a1-4247-baba-1e0f9a907666"
+def sshCredentialsId = "19f16959-8a0d-4a60-bd1f-5adb4572b702"
 
 //// internal maven central credentials
 def mavenCentralCredentialsId = "87bfb2d4-7613-4816-9fe1-70dfd7e6dec2"

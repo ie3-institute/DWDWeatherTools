@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -35,8 +36,12 @@ public class Downloader implements Runnable {
   public static final Logger logger = LogManager.getLogger(Downloader.class);
   public static final Logger filestatusLogger = LogManager.getLogger("FileStatus");
 
-  public int downloadedFiles = 0;
-  private DatabaseController dbController;
+  private int downloadedFiles = 0;
+  private final DatabaseController dbController;
+
+  public Downloader() {
+    dbController = new DatabaseController(PERSISTENCE_UNIT_NAME, validateConnectionProperties());
+  }
 
   /** @return if a connection to given url could be established */
   public static boolean isUrlReachable(String url) {
@@ -53,9 +58,13 @@ public class Downloader implements Runnable {
     return false;
   }
 
-  public void printInit() {
+  private void printInit() {
     logger.info("________________________________________________________________________________");
     logger.info("Downloader started");
+  }
+
+  private ZonedDateTime safeZonedDateTime(ZonedDateTime zdt) {
+    return zdt.toLocalDateTime().atZone(ZoneId.of("UTC"));
   }
 
   public void run() {
@@ -64,10 +73,9 @@ public class Downloader implements Runnable {
     printInit();
     try {
 
-      validateConnectionProperties();
-
       // get newest possible modelrun: (now - 3h) rounded down to the next multiple of 3
-      ZonedDateTime newestPossibleModelrun = ZonedDateTime.now();
+      ZonedDateTime newestPossibleModelrun = safeZonedDateTime(ZonedDateTime.now());
+
       newestPossibleModelrun =
           newestPossibleModelrun
               .minusHours(3)
@@ -108,7 +116,7 @@ public class Downloader implements Runnable {
       downloadedFiles = 0;
 
       // download new files
-      ZonedDateTime currentModelrun = newestDateDownloaded.plusHours(3);
+      ZonedDateTime currentModelrun = safeZonedDateTime(newestDateDownloaded).plusHours(3);
 
       // while the newest possible modelrun is later than or equal to the current one
       // write Files from DWD database to file
@@ -225,7 +233,7 @@ public class Downloader implements Runnable {
   }
 
   /** Validates Connection Properties from user input */
-  private void validateConnectionProperties() {
+  private Properties validateConnectionProperties() {
     Properties receivedProperties = new Properties();
 
     if (Main.connectionUrl != null)
@@ -237,6 +245,6 @@ public class Downloader implements Runnable {
     if (Main.databasePassword != null)
       receivedProperties.setProperty("javax.persistence.jdbc.password", Main.databasePassword);
 
-    dbController = new DatabaseController(PERSISTENCE_UNIT_NAME, receivedProperties);
+    return receivedProperties;
   }
 }

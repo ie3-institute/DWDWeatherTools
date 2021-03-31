@@ -568,7 +568,7 @@ def getMasterBranchProps() {
 // requires the gradle version to be configured with the same name under tools in jenkins configuration
 def gradle(command) {
     env.JENKINS_NODE_COOKIE = 'dontKillMe' // this is necessary for the Gradle daemon to be kept alive
-    sh "${tool name: 'gradle6.0.1', type: 'hudson.plugins.gradle.GradleInstallation'}/bin/gradle ${command}"
+    sh "${tool name: 'gradle6.3', type: 'hudson.plugins.gradle.GradleInstallation'}/bin/gradle ${command}"
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

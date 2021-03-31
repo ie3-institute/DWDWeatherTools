@@ -23,7 +23,7 @@ public class ConfigurationParameters {
    * information
    */
   public static final DateTimeFormatter MODEL_RUN_FORMATTER =
-      DateTimeFormatter.ofPattern("dd.MM.YYYY HH:mm zzz");
+      DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm zzz");
 
   /**
    * Only for sql output - this convert's a given ZonedDateTime to LocalDateTime neglecting the

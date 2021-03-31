@@ -27,7 +27,7 @@ import org.junit.Test;
 
 public class ExtractorTest {
 
-  private static String resourcesPath =
+  private static final String resourcesPath =
       System.getProperty("user.dir")
           + File.separator
           + "src"
@@ -36,7 +36,7 @@ public class ExtractorTest {
           + File.separator
           + "resources"
           + File.separator;
-  private static String extractorPath = resourcesPath + "extractorFiles";
+  private static final String extractorPath = resourcesPath + "extractorFiles";
 
   private final FileModel dummyFileModel = new FileModel(ZonedDateTime.now(), 1, Parameter.ASOB_S);
 

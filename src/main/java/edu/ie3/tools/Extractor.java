@@ -42,11 +42,21 @@ public class Extractor implements Callable<ExtractorResult> {
     formattedTimestep = Converter.getFormattedTimestep(file);
   }
 
+  private boolean validHeadline(String headlineString) {
+    // since eccodes v2.21.0 the data extraction expects a headline w/o commas but with whitespaces
+    // see ECC-1197 - https://jira.ecmwf.int/browse/ECC-1197
+    String headline = "Latitude Longitude Value";
+    String oldHeadline = "Latitude, Longitude, Value";
+
+    return headlineString != null
+        && (headlineString.trim().equals(headline) || headlineString.trim().equals(oldHeadline));
+  }
+
   protected HashMap<CoordinateModel, Double> parse(BufferedReader reader) throws IOException {
     HashMap<CoordinateModel, Double> coordinateToValue = new HashMap<>(720729);
     try {
       String line = reader.readLine();
-      if (line == null || !line.trim().equals("Latitude, Longitude, Value")) {
+      if (!validHeadline(line)) {
         throw new IOException("Unexpected start of file: " + line);
       }
       while ((line = reader.readLine()) != null) {

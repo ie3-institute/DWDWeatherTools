@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/ie3-institute/DWDWeatherTools.svg?branch=master)](https://travis-ci.org/ie3-institute/DWDWeatherTools)
+[![Build Status](https://simona.ie3.e-technik.tu-dortmund.de/ci/buildStatus/icon?job=ie3-institute%2FDWDWeatherTools%2Fmaster)](https://simona.ie3.e-technik.tu-dortmund.de/ci/job/ie3-institute/job/DWDWeatherTools/job/master/)
+[![Quality Gate Status](https://simona.ie3.e-technik.tu-dortmund.de/sonar/api/project_badges/measure?project=edu.ie3%3Adwdtools&metric=alert_status)](https://simona.ie3.e-technik.tu-dortmund.de/sonar/dashboard?id=edu.ie3%3Adwdtools)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/658808baceae464497d90562a61a09a4)](https://www.codacy.com/gh/ie3-institute/DWDWeatherTools?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ie3-institute/DWDWeatherTools&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/ie3-institute/DWDWeatherTools/branch/master/graph/badge.svg)](https://codecov.io/gh/ie3-institute/DWDWeatherTools)
 [![License](https://img.shields.io/github/license/ie3-institute/powersystemdatamodel)](https://github.com/ie3-institute/powersystemdatamodel/blob/master/LICENSE)

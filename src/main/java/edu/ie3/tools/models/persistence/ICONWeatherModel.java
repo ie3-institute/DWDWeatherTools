@@ -21,8 +21,8 @@ public class ICONWeatherModel implements Serializable {
   private static final long serialVersionUID = -3506091597737302833L;
 
   @Id
-  @Column(name = "datum", nullable = false)
-  private ZonedDateTime date;
+  @Column(name = "time", nullable = false)
+  private ZonedDateTime time;
 
   @Id
   @ManyToOne(cascade = CascadeType.DETACH)
@@ -138,8 +138,8 @@ public class ICONWeatherModel implements Serializable {
 
   public ICONWeatherModel() {}
 
-  public ICONWeatherModel(ZonedDateTime date, CoordinateModel coordinate) {
-    this.date = date;
+  public ICONWeatherModel(ZonedDateTime time, CoordinateModel coordinate) {
+    this.time = time;
     this.coordinate = coordinate;
   }
 
@@ -162,7 +162,7 @@ public class ICONWeatherModel implements Serializable {
   }
 
   public ICONWeatherKey getKey() {
-    return new ICONWeatherKey(coordinate, date);
+    return new ICONWeatherKey(coordinate, time);
   }
 
   public static String getSQLUpsertStatement(Collection<ICONWeatherModel> entities) {
@@ -176,15 +176,15 @@ public class ICONWeatherModel implements Serializable {
         "INSERT INTO "
             + database_schema
             + ".weather(\n"
-            + "\tdatum, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s, sobs_rad, p_20m, p_65m, p_131m, t_131m, t_2m, t_g, u_10m, u_131m, u_20m, u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, z0, coordinate_id)\n"
+            + "\ttime, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s, sobs_rad, p_20m, p_65m, p_131m, t_131m, t_2m, t_g, u_10m, u_131m, u_20m, u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, z0, coordinate_id)\n"
             + "\t VALUES ");
     entities.forEach(
         entity -> upsertStatementBuilder.append(entity.getSQLInsertValuesString() + ", "));
     int lastComma = upsertStatementBuilder.lastIndexOf(",");
     upsertStatementBuilder.deleteCharAt(lastComma);
-    upsertStatementBuilder.append("ON CONFLICT (coordinate_id, datum) DO UPDATE \n" + "  SET ");
+    upsertStatementBuilder.append("ON CONFLICT (coordinate_id, time) DO UPDATE \n" + "  SET ");
     upsertStatementBuilder.append(
-        "datum=excluded.datum,\n"
+        "time=excluded.time,\n"
             + " alb_rad=excluded.alb_rad,\n"
             + " asob_s=excluded.asob_s,\n"
             + " aswdifd_s=excluded.aswdifd_s,\n"
@@ -216,12 +216,12 @@ public class ICONWeatherModel implements Serializable {
     return upsertStatementBuilder.toString();
   }
 
-  public ZonedDateTime getDate() {
-    return date;
+  public ZonedDateTime getTime() {
+    return time;
   }
 
-  public void setDate(ZonedDateTime date) {
-    this.date = date;
+  public void setTime(ZonedDateTime date) {
+    this.time = date;
   }
 
   public Double getAlb_rad() {
@@ -714,13 +714,13 @@ public class ICONWeatherModel implements Serializable {
     this.coordinate = coordinate;
   }
 
-  // (datum, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s,sobs_rad,p_20m,p_65m,p_131m, t_131m,
+  // (time, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s,sobs_rad,p_20m,p_65m,p_131m, t_131m,
   // t_2m, t_g, u_10m, u_131m, u_20m,
   // u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, z0,
   // coordinate_id)
   public String getSQLInsertValuesString() {
     String insertValues = "(";
-    insertValues += "'" + ConfigurationParameters.SQL_FORMATTER(date) + "', ";
+    insertValues += "'" + ConfigurationParameters.SQL_FORMATTER(time) + "', ";
     insertValues += alb_rad + ", ";
     insertValues += asob_s + ", ";
     insertValues += aswdifd_s + ", ";
@@ -765,7 +765,7 @@ public class ICONWeatherModel implements Serializable {
             + ".weather w JOIN "
             + database_schema
             + ".icon_coordinates c ON w.coordinate_id = c.id "
-            + "WHERE datum=? AND coordinate_id = ANY(?);";
+            + "WHERE time=? AND coordinate_id = ANY(?);";
     return query;
   }
 
@@ -774,7 +774,7 @@ public class ICONWeatherModel implements Serializable {
     if (this == o) return true;
     if (!(o instanceof ICONWeatherModel)) return false;
     ICONWeatherModel that = (ICONWeatherModel) o;
-    return Objects.equals(date, that.date)
+    return Objects.equals(time, that.time)
         && Objects.equals(coordinate, that.coordinate)
         && Objects.equals(alb_rad, that.alb_rad)
         && Objects.equals(asob_s, that.asob_s)
@@ -807,14 +807,14 @@ public class ICONWeatherModel implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(coordinate, date);
+    return Objects.hash(coordinate, time);
   }
 
   @Override
   public String toString() {
     return "ICONWeatherModel{"
-        + "date="
-        + date
+        + "time="
+        + time
         + "\n, coordinate="
         + coordinate
         + ", alb_rad="

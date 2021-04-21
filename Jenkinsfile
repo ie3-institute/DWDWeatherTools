@@ -616,29 +616,30 @@ def resolveBranchNo(String featureBranchPRMinusNo) {
 }
 
 def resolveBranchName(String featureBranchPRMinusNo, String orgName, String repoName) {
+    def prNo = extractPrNumber(featureBranchPRMinusNo)
 
+    // curl the repo based on the feature branch no to get the branch information
+    /// Note: only works for public repos! Otherwise credentials needs to be passed
+    String response = curlByPR(prNo, orgName, repoName)
+    log("i", "API response:" + response)
+    def jsonResponse = readJSON text: response
+    def branchName = jsonResponse.head.ref
+
+    return branchName
+}
+
+def extractPrNumber(String featureBranchPRMinusNo) {
     // get pull request number
     def branchNoMatcher = featureBranchPRMinusNo =~ /PR-(.*)/
     assert branchNoMatcher.find()
 
-    def prNo = branchNoMatcher[0][1]
+    String prNo = branchNoMatcher[0][1]
+    log("i", "PR number: " + prNo + " of class " + prNo.getClass())
+    return prNo
+}
 
-    // curl the repo based on the feature branch no to get the branch information
-    /// Note: only works for public repos! Otherwise credentials needs to be passed
-    def curlUrl = "curl https://api.github.com/repos/" + orgName + "/" + repoName + "/pulls/" + prNo
-    def response = curlUrl.execute().text
-    def matcher = response =~ /\"label\":\s\"(.+)\"/
-
-    assert matcher.find()
-
-    // get split the label to account for PRs from forks
-    def split = matcher[0][1] =~ /(.*):(.*)/
-
-    assert matcher.find()
-
-    def username = split[0][1]
-    def branch = split[0][2]
-
-    return branch
-
+def curlByPR(String prId, String orgName, String repoName) {
+    def curlUrl = "set +x && curl -s https://api.github.com/repos/" + orgName + "/" + repoName + "/pulls/" + prId
+    String jsonResponseString = sh(script: curlUrl, returnStdout: true)
+    return jsonResponseString
 }

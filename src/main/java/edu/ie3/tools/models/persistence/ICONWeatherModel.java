@@ -21,8 +21,8 @@ public class ICONWeatherModel implements Serializable {
   private static final long serialVersionUID = -3506091597737302833L;
 
   @Id
-  @Column(name = "datum", nullable = false)
-  private ZonedDateTime date;
+  @Column(name = "time", nullable = false)
+  private ZonedDateTime time;
 
   @Id
   @ManyToOne(cascade = CascadeType.DETACH)
@@ -138,8 +138,8 @@ public class ICONWeatherModel implements Serializable {
 
   public ICONWeatherModel() {}
 
-  public ICONWeatherModel(ZonedDateTime date, CoordinateModel coordinate) {
-    this.date = date;
+  public ICONWeatherModel(ZonedDateTime time, CoordinateModel coordinate) {
+    this.time = time;
     this.coordinate = coordinate;
   }
 
@@ -162,7 +162,7 @@ public class ICONWeatherModel implements Serializable {
   }
 
   public ICONWeatherKey getKey() {
-    return new ICONWeatherKey(coordinate, date);
+    return new ICONWeatherKey(coordinate, time);
   }
 
   public static String getSQLUpsertStatement(Collection<ICONWeatherModel> entities) {
@@ -172,56 +172,58 @@ public class ICONWeatherModel implements Serializable {
   public static String getSQLUpsertStatement(
       Collection<ICONWeatherModel> entities, String database_schema) {
     StringBuilder upsertStatementBuilder = new StringBuilder();
-    upsertStatementBuilder.append(
-        "INSERT INTO "
-            + database_schema
-            + ".weather(\n"
-            + "\tdatum, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s, sobs_rad, p_20m, p_65m, p_131m, t_131m, t_2m, t_g, u_10m, u_131m, u_20m, u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, z0, coordinate_id)\n"
-            + "\t VALUES ");
+    upsertStatementBuilder
+        .append("INSERT INTO ")
+        .append(database_schema)
+        .append(".weather(\n")
+        .append(
+            "\ttime, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s, sobs_rad, p_20m, p_65m, p_131m, t_131m, t_2m, t_g, u_10m, u_131m, u_20m, u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, z0, coordinate_id)\n")
+        .append("\t VALUES ");
     entities.forEach(
-        entity -> upsertStatementBuilder.append(entity.getSQLInsertValuesString() + ", "));
+        entity -> upsertStatementBuilder.append(entity.getSQLInsertValuesString()).append(", "));
     int lastComma = upsertStatementBuilder.lastIndexOf(",");
     upsertStatementBuilder.deleteCharAt(lastComma);
-    upsertStatementBuilder.append("ON CONFLICT (coordinate_id, datum) DO UPDATE \n" + "  SET ");
-    upsertStatementBuilder.append(
-        "datum=excluded.datum,\n"
-            + " alb_rad=excluded.alb_rad,\n"
-            + " asob_s=excluded.asob_s,\n"
-            + " aswdifd_s=excluded.aswdifd_s,\n"
-            + " aswdifu_s=excluded.aswdifu_s,\n"
-            + " aswdir_s=excluded.aswdir_s,\n"
-            + " sobs_rad=excluded.sobs_rad,\n"
-            + " p_20m=excluded.p_20m,\n"
-            + " p_65m=excluded.p_65m,\n"
-            + " p_131m=excluded.p_131m,\n"
-            + " t_131m=excluded.t_131m,\n"
-            + " t_2m=excluded.t_2m,\n"
-            + " t_g=excluded.t_g,\n"
-            + " u_10m=excluded.u_10m,\n"
-            + " u_131m=excluded.u_131m,\n"
-            + " u_20m=excluded.u_20m,\n"
-            + " u_216m=excluded.u_216m,\n"
-            + " u_65m=excluded.u_65m,\n"
-            + " v_10m=excluded.v_10m,\n"
-            + " v_131m=excluded.v_131m,\n"
-            + " v_20m=excluded.v_20m,\n"
-            + " v_216m=excluded.v_216m,\n"
-            + " v_65m=excluded.v_65m,\n"
-            + " w_131m=excluded.w_131m,\n"
-            + " w_20m=excluded.w_20m,\n"
-            + " w_216m=excluded.w_216m,\n"
-            + " w_65m=excluded.w_65m,\n"
-            + " z0=excluded.z0,\n"
-            + " coordinate_id=excluded.coordinate_id;");
+    upsertStatementBuilder
+        .append("ON CONFLICT (coordinate_id, time) DO UPDATE \n" + "  SET ")
+        .append(
+            "time=excluded.time,\n"
+                + " alb_rad=excluded.alb_rad,\n"
+                + " asob_s=excluded.asob_s,\n"
+                + " aswdifd_s=excluded.aswdifd_s,\n"
+                + " aswdifu_s=excluded.aswdifu_s,\n"
+                + " aswdir_s=excluded.aswdir_s,\n"
+                + " sobs_rad=excluded.sobs_rad,\n"
+                + " p_20m=excluded.p_20m,\n"
+                + " p_65m=excluded.p_65m,\n"
+                + " p_131m=excluded.p_131m,\n"
+                + " t_131m=excluded.t_131m,\n"
+                + " t_2m=excluded.t_2m,\n"
+                + " t_g=excluded.t_g,\n"
+                + " u_10m=excluded.u_10m,\n"
+                + " u_131m=excluded.u_131m,\n"
+                + " u_20m=excluded.u_20m,\n"
+                + " u_216m=excluded.u_216m,\n"
+                + " u_65m=excluded.u_65m,\n"
+                + " v_10m=excluded.v_10m,\n"
+                + " v_131m=excluded.v_131m,\n"
+                + " v_20m=excluded.v_20m,\n"
+                + " v_216m=excluded.v_216m,\n"
+                + " v_65m=excluded.v_65m,\n"
+                + " w_131m=excluded.w_131m,\n"
+                + " w_20m=excluded.w_20m,\n"
+                + " w_216m=excluded.w_216m,\n"
+                + " w_65m=excluded.w_65m,\n"
+                + " z0=excluded.z0,\n"
+                + " coordinate_id=excluded.coordinate_id;");
     return upsertStatementBuilder.toString();
   }
 
-  public ZonedDateTime getDate() {
-    return date;
+  public ZonedDateTime getTime() {
+    return time;
   }
 
-  public void setDate(ZonedDateTime date) {
-    this.date = date;
+  public void setTime(ZonedDateTime date) {
+    this.time = date;
   }
 
   public Double getAlb_rad() {
@@ -714,13 +716,13 @@ public class ICONWeatherModel implements Serializable {
     this.coordinate = coordinate;
   }
 
-  // (datum, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s,sobs_rad,p_20m,p_65m,p_131m, t_131m,
+  // (time, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s,sobs_rad,p_20m,p_65m,p_131m, t_131m,
   // t_2m, t_g, u_10m, u_131m, u_20m,
   // u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, z0,
   // coordinate_id)
   public String getSQLInsertValuesString() {
     String insertValues = "(";
-    insertValues += "'" + ConfigurationParameters.SQL_FORMATTER(date) + "', ";
+    insertValues += "'" + ConfigurationParameters.SQL_FORMATTER(time) + "', ";
     insertValues += alb_rad + ", ";
     insertValues += asob_s + ", ";
     insertValues += aswdifd_s + ", ";
@@ -765,7 +767,7 @@ public class ICONWeatherModel implements Serializable {
             + ".weather w JOIN "
             + database_schema
             + ".icon_coordinates c ON w.coordinate_id = c.id "
-            + "WHERE datum=? AND coordinate_id = ANY(?);";
+            + "WHERE time=? AND coordinate_id = ANY(?);";
     return query;
   }
 
@@ -774,7 +776,7 @@ public class ICONWeatherModel implements Serializable {
     if (this == o) return true;
     if (!(o instanceof ICONWeatherModel)) return false;
     ICONWeatherModel that = (ICONWeatherModel) o;
-    return Objects.equals(date, that.date)
+    return Objects.equals(time, that.time)
         && Objects.equals(coordinate, that.coordinate)
         && Objects.equals(alb_rad, that.alb_rad)
         && Objects.equals(asob_s, that.asob_s)
@@ -807,14 +809,14 @@ public class ICONWeatherModel implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(coordinate, date);
+    return Objects.hash(coordinate, time);
   }
 
   @Override
   public String toString() {
     return "ICONWeatherModel{"
-        + "date="
-        + date
+        + "time="
+        + time
         + "\n, coordinate="
         + coordinate
         + ", alb_rad="

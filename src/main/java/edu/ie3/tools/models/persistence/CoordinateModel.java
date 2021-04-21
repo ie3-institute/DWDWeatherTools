@@ -29,7 +29,7 @@ import javax.persistence.*;
               + "AND longitude BETWEEN :minLongitude AND :maxLongitude"),
 })
 @Entity(name = "icon_coordinates")
-public class CoordinateModel extends edu.ie3.tools.models.persistence.AbstractCoordinateModel {
+public class CoordinateModel extends AbstractCoordinateModel {
 
   public static final String COSMO_Coordinates = "CoordinateModel.COSMO_Coordinates";
   public static final String ICON_Coordinates = "CoordinateModel.ICON_Coordinates";

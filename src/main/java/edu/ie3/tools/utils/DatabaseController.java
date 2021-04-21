@@ -200,7 +200,7 @@ public class DatabaseController {
             coordinateModel.setLongitude(rs.getDouble("longitude"));
             ICONWeatherModel weather =
                 new ICONWeatherModel(
-                    ZonedDateTime.of(rs.getTimestamp("datum").toLocalDateTime(), ZoneId.of("UTC")),
+                    ZonedDateTime.of(rs.getTimestamp("time").toLocalDateTime(), ZoneId.of("UTC")),
                     coordinateModel);
 
             for (Parameter parameter : Parameter.values()) {

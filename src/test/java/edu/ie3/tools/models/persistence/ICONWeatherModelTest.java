@@ -58,17 +58,17 @@ public class ICONWeatherModelTest {
   @Test
   public void getInterpolatedEntity() {
     ICONWeatherModel interpolatedEntity = ICONWeatherModel.getInterpolatedEntity(weather);
-    interpolatedEntity.setDate(date);
+    interpolatedEntity.setTime(date);
     interpolatedEntity.setCoordinate(coordinate);
     assertEquals(weather, interpolatedEntity); // should be the same
 
     ICONWeatherModel newWeather = new ICONWeatherModel(date, coordinate);
-    interpolatedEntity.setDate(date);
+    interpolatedEntity.setTime(date);
     interpolatedEntity.setCoordinate(coordinate);
     newWeather.setAlb_rad(alb_rad);
 
     interpolatedEntity = ICONWeatherModel.getInterpolatedEntity(weather, newWeather);
-    interpolatedEntity.setDate(date);
+    interpolatedEntity.setTime(date);
     interpolatedEntity.setCoordinate(coordinate);
     assertEquals(
         weather,
@@ -82,7 +82,7 @@ public class ICONWeatherModelTest {
     }
     HashMap<String, Double> collectedParameterValues = collectParameterValues(testEntities);
     interpolatedEntity = ICONWeatherModel.getInterpolatedEntity(testEntities);
-    interpolatedEntity.setDate(date);
+    interpolatedEntity.setTime(date);
     interpolatedEntity.setCoordinate(coordinate);
 
     assertEquals(collectedParameterValues.get("alb_rad") / 10, interpolatedEntity.getAlb_rad());
@@ -117,20 +117,20 @@ public class ICONWeatherModelTest {
   @Test
   public void getSQLUpsertStatement() {
     ICONWeatherModel randWeather1 = generateRandomWeatherEntity();
-    randWeather1.setDate(date);
+    randWeather1.setTime(date);
     randWeather1.setCoordinate(coordinate);
     ICONWeatherModel randWeather2 = generateRandomWeatherEntity();
-    randWeather2.setDate(date);
+    randWeather2.setTime(date);
     randWeather2.setCoordinate(coordinate);
     Collection<ICONWeatherModel> entities = Arrays.asList(weather, randWeather1, randWeather2);
     String generatedUpsertStatement = ICONWeatherModel.getSQLUpsertStatement(entities, "test");
     String sqlInsertInto =
-        "INSERT INTO test.weather(\n\tdatum, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s, sobs_rad, p_20m, p_65m, p_131m, t_131m, t_2m, t_g, "
+        "INSERT INTO test.weather(\n\ttime, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s, sobs_rad, p_20m, p_65m, p_131m, t_131m, t_2m, t_g, "
             + "u_10m, u_131m, u_20m, u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, "
             + "z0, coordinate_id)\n\t VALUES ";
     assertTrue(generatedUpsertStatement.startsWith(sqlInsertInto));
     String sqlOnConflict =
-        " ON CONFLICT (coordinate_id, datum) DO UPDATE \n  SET datum=excluded.datum,\n "
+        " ON CONFLICT (coordinate_id, time) DO UPDATE \n  SET time=excluded.time,\n "
             + "alb_rad=excluded.alb_rad,\n asob_s=excluded.asob_s,\n aswdifd_s=excluded.aswdifd_s,\n "
             + "aswdifu_s=excluded.aswdifu_s,\n aswdir_s=excluded.aswdir_s,\n sobs_rad=excluded.sobs_rad,\n "
             + "p_20m=excluded.p_20m,\n p_65m=excluded.p_65m,\n p_131m=excluded.p_131m,\n t_131m=excluded.t_131m,\n "

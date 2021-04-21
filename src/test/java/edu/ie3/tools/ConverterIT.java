@@ -200,11 +200,11 @@ public class ConverterIT {
       assertEquals(numberOfCoordinates * 3, numberOfRows);
 
       statement = connect.createStatement();
-      rs = statement.executeQuery("SELECT DISTINCT(datum) AS datum FROM icon.weather;");
+      rs = statement.executeQuery("SELECT DISTINCT(time) AS time FROM icon.weather;");
       statement.closeOnCompletion();
       Set<String> dates = new HashSet<>();
       while (rs.next()) {
-        dates.add(rs.getTimestamp("datum").toString());
+        dates.add(rs.getTimestamp("time").toString());
       }
       // contains three dates, as two date points should overlap
       // (Modelrun 3 + Timestep 0 == Modelrun 0 + Timestep 3 == 3 o' Clock)
@@ -347,7 +347,7 @@ public class ConverterIT {
             + param
             + " as value from icon.weather where coordinate_id = "
             + coord_id
-            + " and datum = '"
+            + " and time = '"
             + dateString
             + "';";
     return query;

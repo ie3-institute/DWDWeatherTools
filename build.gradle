@@ -80,7 +80,7 @@ dependencies {
 	//tests
 	testCompile 'junit:junit:4.+'
 //	testCompile 'org.testcontainers:testcontainers:1.+'
-	testCompile 'org.testcontainers:postgresql:1.11.4'
+	testCompile 'org.testcontainers:postgresql:1.15.3'
 
 }
 

@@ -8,7 +8,7 @@ plugins {
 	id 'com.github.spotbugs' version '4.7.1' // code check, working on byte code
 	id 'com.diffplug.spotless' version '5.14.0'// code format
 	id 'com.simonharrer.modernizer' version '1.6.0-1' // detect deprecated APIs
-	id 'com.github.onslip.gradle-one-jar' version '1.0.5' // pack a self contained jar
+	id 'com.github.onslip.gradle-one-jar' version '1.0.6' // pack a self contained jar
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "3.3" // sonarqube
 }

@@ -74,7 +74,7 @@ dependencies {
 	compile 'org.apache.commons:commons-compress:1.+'
 	compile 'org.jetbrains:annotations:16.+'
 	annotationProcessor 'info.picocli:picocli-codegen:4.6.1'
-	compile 'info.picocli:picocli:4.0.0'
+	compile 'info.picocli:picocli:4.6.1'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.+'
 
 	//tests

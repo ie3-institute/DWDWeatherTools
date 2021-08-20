@@ -53,8 +53,8 @@ tasks.withType(JavaCompile) {
 
 dependencies {
 	//hibernate
-	compile 'org.hibernate:hibernate-core:' + hibernateVersion
-	compile 'org.hibernate:hibernate-ehcache:' + hibernateVersion
+	implementation 'org.hibernate:hibernate-core:' + hibernateVersion
+	implementation 'org.hibernate:hibernate-ehcache:' + hibernateVersion
 
 	//JAXB (needed for hibernate, but not longer contained in JDK9+)
 	implementation 'javax.xml.bind:jaxb-api:2.+'
@@ -63,29 +63,28 @@ dependencies {
 	implementation 'javax.activation:activation:1.+'
 
 	//database
-	compile 'org.postgresql:postgresql:42.+'
-	compile 'javax.persistence:javax.persistence-api:2.2'
+	implementation 'org.postgresql:postgresql:42.+'
+	implementation 'javax.persistence:javax.persistence-api:2.2'
 
 	// logging
-	compile 'org.apache.logging.log4j:log4j-1.2-api:2.+' // log4j
-	compile 'org.apache.logging.log4j:log4j-core:2.+' // log4j
+	implementation 'org.apache.logging.log4j:log4j-1.2-api:2.+' // log4j
+	implementation 'org.apache.logging.log4j:log4j-core:2.+' // log4j
 
-	compile 'commons-io:commons-io:2.+'
-	compile 'org.apache.commons:commons-compress:1.+'
-	compile 'org.jetbrains:annotations:16.+'
+	implementation 'commons-io:commons-io:2.+'
+	implementation 'org.apache.commons:commons-compress:1.+'
+	implementation 'org.jetbrains:annotations:16.+'
 	annotationProcessor 'info.picocli:picocli-codegen:4.6.1'
-	compile 'info.picocli:picocli:4.6.1'
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.+'
+	implementation 'info.picocli:picocli:4.6.1'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.+'
 
 	//tests
-	testCompile 'junit:junit:4.+'
-//	testCompile 'org.testcontainers:testcontainers:1.+'
-	testCompile 'org.testcontainers:postgresql:1.16.0'
+	testImplementation 'junit:junit:4.+'
+	testImplementation 'org.testcontainers:postgresql:1.16.0'
 
 }
 
 wrapper {
-	gradleVersion = '5.4.1'
+	gradleVersion = '7.2'
 }
 
 /* Maven publish - start */

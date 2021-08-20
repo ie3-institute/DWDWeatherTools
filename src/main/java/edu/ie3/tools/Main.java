@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimeZone;
+import net.sf.ehcache.util.FindBugsSuppressWarnings;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -76,26 +77,31 @@ public class Main {
   @CommandLine.Option(
       names = {"-user", "--database_user"},
       description = "Database user")
+  @FindBugsSuppressWarnings("MS_SHOULD_BE_FINAL")
   public static String databaseUser = "";
 
   @CommandLine.Option(
       names = {"-pwd", "--database_password"},
       description = "Database password")
+  @FindBugsSuppressWarnings("MS_SHOULD_BE_FINAL")
   public static String databasePassword = "";
 
   @CommandLine.Option(
       names = {"-conn", "--connection_url"},
       description = "Database connection url. Default: jdbc:postgresql://127.0.0.1:5432/dwd")
+  @FindBugsSuppressWarnings("MS_SHOULD_BE_FINAL")
   public static String connectionUrl = "jdbc:postgresql://127.0.0.1:5432/dwd";
 
   @CommandLine.Option(
       names = {"-schema"},
       description = "default database schema")
+  @FindBugsSuppressWarnings("MS_SHOULD_BE_FINAL")
   public static String database_schema = "icon";
 
   @CommandLine.Option(
       names = {"-m", "--missing_value_string"},
       description = "Configure the NULL-Value-String to set and parse in textfile")
+  @FindBugsSuppressWarnings("MS_SHOULD_BE_FINAL")
   public static String missingValue = "null";
 
   @CommandLine.Option(

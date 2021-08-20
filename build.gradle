@@ -16,6 +16,7 @@ plugins {
 ext {
 	//version (changing these should be considered thoroughly!)
 	hibernateVersion = '5.3.3.Final'
+	log4jVersion = '2.14.1'
 	javaVersion = JavaVersion.VERSION_1_8
 
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
@@ -56,25 +57,25 @@ dependencies {
 	implementation 'org.hibernate:hibernate-ehcache:' + hibernateVersion
 
 	//JAXB (needed for hibernate, but not longer contained in JDK9+)
-	implementation 'javax.xml.bind:jaxb-api:2.+'
-	implementation 'com.sun.xml.bind:jaxb-core:2.+'
-	implementation 'com.sun.xml.bind:jaxb-impl:2.+'
-	implementation 'javax.activation:activation:1.+'
+	implementation 'javax.xml.bind:jaxb-api:2.4.0'
+	implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+	implementation 'com.sun.xml.bind:jaxb-impl:2.4.0'
+	implementation 'javax.activation:activation:1.1.1'
 
 	//database
-	implementation 'org.postgresql:postgresql:42.+'
+	implementation 'org.postgresql:postgresql:42.2.23'
 	implementation 'javax.persistence:javax.persistence-api:2.2'
 
 	// logging
-	implementation 'org.apache.logging.log4j:log4j-1.2-api:2.+' // log4j
-	implementation 'org.apache.logging.log4j:log4j-core:2.+' // log4j
+	implementation "org.apache.logging.log4j:log4j-1.2-api:$log4jVersion" // log4j
+	implementation "org.apache.logging.log4j:log4j-core:$log4jVersion" // log4j
 
-	implementation 'commons-io:commons-io:2.+'
-	implementation 'org.apache.commons:commons-compress:1.+'
-	implementation 'org.jetbrains:annotations:16.+'
+	implementation 'commons-io:commons-io:2.11.0'
+	implementation 'org.apache.commons:commons-compress:1.21'
+	implementation 'org.jetbrains:annotations:16.0.3'
 	annotationProcessor 'info.picocli:picocli-codegen:4.6.1'
 	implementation 'info.picocli:picocli:4.6.1'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.+'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
 
 	//tests
 	testImplementation 'junit:junit:4.+'

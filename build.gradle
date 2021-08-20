@@ -41,8 +41,7 @@ apply from: scriptsLocation + 'jacoco.gradle' // jacoco java code coverage
 apply from: scriptsLocation + 'sonarqube.gradle' // sonarqube config
 
 repositories {
-	mavenLocal() //searches in local maven repository, typically ~/.m2/repository
-	jcenter() //searches in bintray's repository 'jCenter', which contains Maven Central
+	mavenCentral() //searches in bintray's repository 'jCenter', which contains Maven Central
 
 	maven { url 'https://jitpack.io' } // allows github repos as dependencies
 }

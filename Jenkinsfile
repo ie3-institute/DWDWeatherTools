@@ -130,7 +130,7 @@ if (env.BRANCH_NAME == "master") {
 
                         stage('deploy') {
                             log(i, "Deploying ${projects.get(0)} to maven central ...")
-                            gradle("-p ${projects.get(0)} ${deployGradleTasks}")
+                            gradle("${deployGradleTasks}", projects.get(0))
 
                             deployedArtifacts = "${projects.get(0)}, "
                         }
@@ -241,12 +241,12 @@ if (env.BRANCH_NAME == "master") {
 
                         // build and test the first project
                         log(i, "building and testing ${projects.get(0)}")
-                        gradle("-p ${projects.get(0)} ${gradleTasks} ${mainProjectGradleTasks}")
+                        gradle("${gradleTasks} ${mainProjectGradleTasks}", projects.get(0))
                     }
 
                     stage('SonarQube analysis') {
                         withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
-                            gradle("-p ${projects.get(0)} sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ")
+                            gradle("sonarqube -Dsonar.branch.name=master -Dsonar.projectKey=$sonarqubeProjectKey ", projects.get(0))
                         }
                     }
 
@@ -273,7 +273,7 @@ if (env.BRANCH_NAME == "master") {
 
 
                             log(i, "Deploying ${projects.get(0)} to maven central ...")
-                            gradle("-p ${projects.get(0)} --parallel ${deployGradleTasks}")
+                            gradle("--parallel ${deployGradleTasks}", projects.get(0))
 
                             deployedArtifacts = "${projects.get(0)}, "
 
@@ -417,13 +417,13 @@ if (env.BRANCH_NAME == "master") {
 
                     // build and test the first project
                     log(i, "building and testing ${projects.get(0)}")
-                    gradle("-p ${projects.get(0)} ${gradleTasks} ${mainProjectGradleTasks}")
+                    gradle("${gradleTasks} ${mainProjectGradleTasks}", projects.get(0))
                 }
 
 
                 stage('SonarQube analysis') {
                     withSonarQubeEnv() { // Will pick the global server connection from jenkins for sonarqube
-                        gradle("-p ${projects.get(0)} sonarqube -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${resolveBranchNo(env.BRANCH_NAME)} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github")
+                        gradle("sonarqube -Dsonar.projectKey=$sonarqubeProjectKey -Dsonar.pullrequest.branch=${featureBranchName} -Dsonar.pullrequest.key=${resolveBranchNo(env.BRANCH_NAME)} -Dsonar.pullrequest.base=master -Dsonar.pullrequest.github.repository=${orgNames.get(0)}/${projects.get(0)} -Dsonar.pullrequest.provider=Github", projects.get(0))
                     }
                 }
 
@@ -566,7 +566,7 @@ def getMasterBranchProps() {
 
 // gradle wrapper for easy execution
 // requires the gradle version to be configured with the same name under tools in jenkins configuration
-def gradle(command) {
+def gradle(String command, String relativeProjectDir) {
     env.JENKINS_NODE_COOKIE = 'dontKillMe' // this is necessary for the Gradle daemon to be kept alive
 
     // switch directory to be able to use gradle wrapper

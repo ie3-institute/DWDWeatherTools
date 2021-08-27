@@ -76,7 +76,7 @@ dependencies {
 	implementation 'org.jetbrains:annotations:22.0.0'
 	annotationProcessor "info.picocli:picocli-codegen:$picoliVersion"
 	implementation "info.picocli:picocli:$picoliVersion"
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
 
 	//tests
 	testImplementation 'junit:junit:4.+'

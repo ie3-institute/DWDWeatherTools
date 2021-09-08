@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+
 plugins {
 	id "com.jfrog.artifactory" version "4.24.16" //artifactory support
 	id 'groovy' // groovy support
@@ -11,6 +13,7 @@ plugins {
 	id 'com.github.onslip.gradle-one-jar' version '1.0.6' // pack a self contained jar
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "3.3" // sonarqube
+	id "com.github.johnrengelman.shadow" version "7.0.0" // fat jar
 }
 
 ext {
@@ -37,7 +40,6 @@ apply from: scriptsLocation + 'spotbugs.gradle'
 apply from: scriptsLocation + 'spotless.gradle'
 apply from: scriptsLocation + 'modernizer.gradle'
 apply from: scriptsLocation + 'checkJavaVersion.gradle'
-apply from: scriptsLocation + 'fatJar.gradle'
 apply from: scriptsLocation + 'tests.gradle'
 apply from: scriptsLocation + 'jacoco.gradle' // jacoco java code coverage
 apply from: scriptsLocation + 'sonarqube.gradle' // sonarqube config
@@ -125,7 +127,7 @@ publishing {
 			from components.java
 			artifact sourcesJar
 			artifact javadocJar
-			artifact fatJar
+			artifact shadowJar
 			versionMapping {
 				usage('java-api') {
 					fromResolutionOf('runtimeClasspath')
@@ -165,4 +167,11 @@ jar {
 run {
 	// Gradle uses an empty Input as default, leading to a non-blocking behaviour and thus an immediate shutdown
 	standardInput = System.in
+}
+
+shadowJar {
+	transform(AppendingTransformer) {
+		resource = 'reference.conf'
+	}
+	zip64 = true
 }

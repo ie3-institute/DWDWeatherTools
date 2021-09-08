@@ -1,0 +1,13 @@
+tasks.register('fatJar', Jar){
+	getArchiveClassifier().set('fat')
+	manifest {
+		attributes(
+				'Main-Class': mainClass
+		)
+	}
+	//baseName = project.archivesBaseName + '-fat'
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	with jar
+}

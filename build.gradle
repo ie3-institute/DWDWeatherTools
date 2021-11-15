@@ -5,7 +5,7 @@ plugins {
 	id 'application' // creates a JVM executable
 	id 'maven-publish' // publish to a maven repo (local or mvn central, has to be defined)
 	id 'pmd' // code check, working on source code
-	id 'com.github.spotbugs' version '4.7.8' // code check, working on byte code
+	id 'com.github.spotbugs' version '4.7.10' // code check, working on byte code
 	id 'com.diffplug.spotless' version '5.17.0'// code format
 	id 'com.simonharrer.modernizer' version '2.1.0-1' // detect deprecated APIs
 	id 'com.github.onslip.gradle-one-jar' version '1.0.6' // pack a self contained jar

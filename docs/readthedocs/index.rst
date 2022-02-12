@@ -7,7 +7,6 @@ Hello weather!
    :maxdepth: 2
    :caption: Contents:
 
-   user/test
    user/users
 
 

@@ -13,7 +13,7 @@ Hello weather!
 
 Contact the (Main) Maintainers
 ------------------------------
-If you feel, something this missing, wrong or misleading, please contact one of our main contributors:
+If you feel, something is missing, wrong or misleading, please contact one of our main contributors:
 
    * `@sensarmad <https://github.com/sensarmad>`_
    * `@johanneshiry <https://github.com/johanneshiry>`_

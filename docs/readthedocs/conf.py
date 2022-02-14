@@ -22,8 +22,8 @@ copyright = u'2022. TU Dortmund University, Institute of Energy Systems, Energy 
 author = 'Johannes Hiry, Debopama Sen Sarma, Chris Kittl, Sebastian Peter, Thomas Oberließen'
 
 # The full version, including alpha/beta/rc tags
-version = '0.0.1'
-release = '0.1-SNAPSHOT'
+version = '0.1.'
+release = '0.1.1-SNAPSHOT'
 
 pygments_style = 'tango'
 add_function_parentheses = True

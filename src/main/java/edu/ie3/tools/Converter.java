@@ -165,7 +165,7 @@ public class Converter implements Runnable {
     logger.info(formattedTimestep + "Opening of archive files started");
     long tic, toc;
     tic = System.currentTimeMillis();
-    openArchiveFiles(currentModelrun, timestep);
+    decompressGribFiles(currentModelrun, timestep);
     toc = System.currentTimeMillis();
     logger.info(
         formattedTimestep + "Opening of archive files finished (" + (toc - tic) / 1000 + "s)");
@@ -175,7 +175,12 @@ public class Converter implements Runnable {
     logger.info(formattedTimestep + "Timestep finished");
   }
 
-  private void openArchiveFiles(ZonedDateTime currentModelrun, int timestep) {
+  /** Decompresses all grib files that are intact for every parameter.
+   *
+   * @param currentModelrun the model run for which to decompress files
+   * @param timestep the time step that is currently handled
+   */
+  private void decompressGribFiles(ZonedDateTime currentModelrun, int timestep) {
     String folderpath =
         Main.directory
             + File.separator

@@ -42,9 +42,13 @@ public class Extractor implements Callable<ExtractorResult> {
     formattedTimestep = Converter.getFormattedTimestep(file);
   }
 
+  /** Checks headline of grib file whether it is valid. Since eccodes v2.21.0 the data extraction expects a headline w/o
+   *  commas but with whitespaces see ECC-1197 - https://jira.ecmwf.int/browse/ECC-1197
+   *
+   * @param headlineString the headline string
+   * @return whether it is valid or not
+   */
   private boolean validHeadline(String headlineString) {
-    // since eccodes v2.21.0 the data extraction expects a headline w/o commas but with whitespaces
-    // see ECC-1197 - https://jira.ecmwf.int/browse/ECC-1197
     String headline = "Latitude Longitude Value";
     String oldHeadline = "Latitude, Longitude, Value";
 
@@ -52,6 +56,14 @@ public class Extractor implements Callable<ExtractorResult> {
         && (headlineString.trim().equals(headline) || headlineString.trim().equals(oldHeadline));
   }
 
+  /** Parses the output of a parameter grib file. And returns a map from coordinate where the value was measured to actual value
+   *  fixme: coordinate without id?
+   *
+   *
+   * @param reader the reader of the grib file input stream
+   * @return map from coordinate where the value was measured to actual value
+   * @throws IOException
+   */
   protected HashMap<CoordinateModel, Double> parse(BufferedReader reader) throws IOException {
     HashMap<CoordinateModel, Double> coordinateToValue = new HashMap<>(720729);
     try {

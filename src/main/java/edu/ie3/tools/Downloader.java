@@ -95,7 +95,7 @@ public class Downloader implements Runnable {
       ZonedDateTime newestDateDownloaded = earliestPossibleModelrun;
       List<FileModel> failedDownloads =
           dbController.execNamedQuery(
-              FileModel.FailedDownloads, Collections.singletonList(earliestPossibleModelrun));
+              FileModel.FAILED_DOWNLOADS, Collections.singletonList(earliestPossibleModelrun));
       for (FileModel file : failedDownloads) {
         ZonedDateTime modelrun = file.getModelrun();
         if (modelrun.isAfter(newestDateDownloaded)) {
@@ -181,7 +181,7 @@ public class Downloader implements Runnable {
    */
   public boolean downloadFile(String folder, FileModel filemodel) {
     boolean success = false;
-    if (!filemodel.isSufficient_size() && filemodel.getDownload_fails() < 3) {
+    if (!filemodel.isSufficientSize() && filemodel.getDownloadFails() < 3) {
       String url = filemodel.getURL();
       try {
         if (isUrlReachable(url)) {
@@ -193,15 +193,15 @@ public class Downloader implements Runnable {
             success = false;
             logger.warn("File " + filemodel.getName() + " is too small (" + file.length() + "B)");
           } else {
-            filemodel.setSufficient_size(true);
+            filemodel.setSufficientSize(true);
             filestatusLogger.trace(
                 file.getName() + "  |  ss   |  sufficient_size = true  | Download success");
 
-            filemodel.setDownload_date(ZonedDateTime.now());
+            filemodel.setDownloadDate(ZonedDateTime.now());
             filestatusLogger.trace(
                 file.getName() + "  |  dd   |  Downloadd_date = now  | Download success");
 
-            filemodel.setArchivefile_deleted(false);
+            filemodel.setArchivefileDeleted(false);
             filestatusLogger.trace(
                 file.getName() + "  |  adf  |  archivefile_deleted = false  | Download success");
             success = true;
@@ -213,7 +213,7 @@ public class Downloader implements Runnable {
         logger.error("Could not download " + filemodel.getName() + " (" + e.getMessage() + ")");
       }
       if (!success) {
-        filemodel.incrementDownload_fails();
+        filemodel.incrementDownloadFails();
         filestatusLogger.trace(
             filemodel.getName() + "  |  idf  |  incremented download_fails  | failed Download");
       }

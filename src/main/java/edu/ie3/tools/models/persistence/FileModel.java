@@ -106,6 +106,13 @@ public class FileModel implements Serializable {
     this.name = name;
   }
 
+  /** Creates the correct file name within the icon model for a parameter within a given time step for a given model run
+   *
+   * @param modelrun the model run to consider
+   * @param timestep the time step to check
+   * @param parameter the considered parameter
+   * @return a String of the expected file name
+   */
   public static String createFileName(ZonedDateTime modelrun, int timestep, Parameter parameter) {
     String name = parameter.getPrefix(); // ie icon-eu_europe_regular-lat-lon_single-level_
     name += FILENAME_DATE_FORMATTER.format(modelrun) + "_"; // ie 2018090512_
@@ -134,11 +141,11 @@ public class FileModel implements Serializable {
     this.parameter = parameter;
   }
 
-  public int getDownload_fails() {
+  public int getDownloadFails() {
     return download_fails;
   }
 
-  public void setDownload_fails(int download_fails) {
+  public void setDownloadFails(int download_fails) {
     this.download_fails = download_fails;
   }
 
@@ -198,6 +205,10 @@ public class FileModel implements Serializable {
     this.persisted = persisted;
   }
 
+  /** Checks if the raw file downloaded from the model run is deleted.
+   *
+   * @return whether it is deleted or not
+   */
   public boolean isArchivefile_deleted() {
     return archivefile_deleted;
   }

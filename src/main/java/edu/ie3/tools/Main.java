@@ -7,9 +7,14 @@
 package edu.ie3.tools;
 
 import java.io.File;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
+
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -56,6 +61,16 @@ public class Main {
       names = {"convert"},
       description = "Converts grib2 files")
   public static boolean doConvert;
+
+  @CommandLine.Option(
+          names = {"-convert_from"},
+          description = "Start datetime of conversion.")
+  public static String convertFrom;
+
+  @CommandLine.Option(
+          names = {"-convert_until"},
+          description = "End datetime of conversion.")
+  public static String convertUntil;
 
   @CommandLine.Option(
       names = {"download"},
@@ -114,10 +129,10 @@ public class Main {
   public static boolean debug = false;
 
   // Coordinate-Rectangle to convert
-  public static final double minLongitude = 4.29694;
-  public static final double maxLongitude = 18.98635;
-  public static final double minLatitude = 45.71457;
-  public static final double maxLatitude = 57.65129;
+  public static final double MIN_LONGITUDE = 4.29694;
+  public static final double MAX_LONGITUDE = 18.98635;
+  public static final double MIN_LATITUDE = 45.71457;
+  public static final double MAX_LATITUDE = 57.65129;
 
   public static void main(String[] args) {
     // ICON-EU data timezone is UTC time,
@@ -143,8 +158,21 @@ public class Main {
       if (!eccodes.isEmpty()) eccodes += File.separator;
       eccodes += "grib_get_data";
     }
-    if (doDownload) new Downloader().run();
-    if (doConvert) new Converter().run();
+
+    if (doConvert) {
+      if (convertFrom != null && convertUntil != null) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC")).withLocale(Locale.GERMANY);
+        ZonedDateTime from = ZonedDateTime.parse(convertFrom, dateTimeFormatter);
+        ZonedDateTime until = ZonedDateTime.parse(convertUntil, dateTimeFormatter);
+        new Converter(from, until).run();
+      }
+      else if (convertFrom != null || convertUntil != null){
+        throw new IllegalArgumentException("Either convertFrom or convertTo is missing. We need both to convert data for a specific interval");
+      }
+      else {
+        new Downloader().run();
+      }
+    }
   }
 
   public static Set<String> printProgramArguments() {

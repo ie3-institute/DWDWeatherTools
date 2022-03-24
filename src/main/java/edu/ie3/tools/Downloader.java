@@ -181,7 +181,7 @@ public class Downloader implements Runnable {
    */
   public boolean downloadFile(String folder, FileModel filemodel) {
     boolean success = false;
-    if (!filemodel.isSufficient_size() && filemodel.getDownload_fails() < 3) {
+    if (!filemodel.isSufficient_size() && filemodel.getDownloadFails() < 3) {
       String url = filemodel.getURL();
       try {
         if (isUrlReachable(url)) {

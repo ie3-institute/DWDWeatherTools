@@ -89,10 +89,10 @@ public class FileModel implements Serializable {
   @Column private boolean persisted;
 
   @Column(name = "archivefile_deleted")
-  private boolean archivefileDeleted;
+  private boolean archiveFileDeleted;
 
   @Column(name = "gribfile_deleted")
-  private boolean gribfileDeleted;
+  private boolean isGribFileDeleted;
 
   public FileModel(ZonedDateTime modelrun, int timestep, Parameter parameter) {
     this.modelrun = modelrun;
@@ -181,11 +181,11 @@ public class FileModel implements Serializable {
     return missingCoordinates;
   }
 
-  public void setMissingCoordinates(int missing_coordinates) {
-    this.missingCoordinates = missing_coordinates;
+  public void setMissingCoordinates(int missingCoordinates) {
+    this.missingCoordinates = missingCoordinates;
   }
 
-  public void addMissing_coordinate() {
+  public void addMissingCoordinate() {
     this.missingCoordinates++;
   }
 
@@ -205,20 +205,20 @@ public class FileModel implements Serializable {
     this.persisted = persisted;
   }
 
-  public boolean isArchivefileDeleted() {
-    return archivefileDeleted;
+  public boolean isArchiveFileDeleted() {
+    return archiveFileDeleted;
   }
 
-  public void setArchivefileDeleted(boolean archivefile_deleted) {
-    this.archivefileDeleted = archivefile_deleted;
+  public void setArchiveFileDeleted(boolean archiveFileDeleted) {
+    this.archiveFileDeleted = archiveFileDeleted;
   }
 
-  public boolean isGribfileDeleted() {
-    return gribfileDeleted;
+  public boolean isGribFileDeleted() {
+    return isGribFileDeleted;
   }
 
-  public void setGribfileDeleted(boolean gribfile_deleted) {
-    this.gribfileDeleted = gribfile_deleted;
+  public void setGribFileDeleted(boolean isGribFileDeleted) {
+    this.isGribFileDeleted = isGribFileDeleted;
   }
 
   public void setModelrun(ZonedDateTime modelrun) {

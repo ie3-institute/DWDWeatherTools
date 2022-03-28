@@ -190,7 +190,7 @@ public class Converter implements Runnable {
       if (file != null) {
         files.add(file);
         if (file.isSufficientSize() && (file.isValidFile() == null || file.isValidFile())) {
-          if (!file.isPersisted() && !file.isArchivefileDeleted() && !file.isDecompressed()) {
+          if (!file.isPersisted() && !file.isArchiveFileDeleted() && !file.isDecompressed()) {
             tasks.add(new Decompressor(file, folderpath));
           }
         } else if (file.getDownloadFails() > 3
@@ -310,8 +310,7 @@ public class Converter implements Runnable {
     }
 
     // update the entities with the extraction results
-    entities
-        .parallelStream()
+    entities.parallelStream()
         .forEach(
             entity ->
                 // get each parameter from the extraction results and update the entity accordingly

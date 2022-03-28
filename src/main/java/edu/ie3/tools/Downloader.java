@@ -201,7 +201,7 @@ public class Downloader implements Runnable {
             filestatusLogger.trace(
                 file.getName() + "  |  dd   |  Downloadd_date = now  | Download success");
 
-            filemodel.setArchivefileDeleted(false);
+            filemodel.setArchiveFileDeleted(false);
             filestatusLogger.trace(
                 file.getName() + "  |  adf  |  archivefile_deleted = false  | Download success");
             success = true;

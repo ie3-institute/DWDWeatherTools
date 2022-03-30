@@ -12,6 +12,7 @@ plugins {
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "3.3" // sonarqube
 	id "kr.motd.sphinx" version "2.10.0"
+	id "com.github.johnrengelman.shadow" version "6.1.0" // fat jar
 }
 
 ext {
@@ -32,13 +33,11 @@ defaultTasks 'build'
 sourceCompatibility = javaVersion
 targetCompatibility = javaVersion
 
-
 apply from: scriptsLocation + 'pmd.gradle'
 apply from: scriptsLocation + 'spotbugs.gradle'
 apply from: scriptsLocation + 'spotless.gradle'
 apply from: scriptsLocation + 'modernizer.gradle'
 apply from: scriptsLocation + 'checkJavaVersion.gradle'
-apply from: scriptsLocation + 'fatJar.gradle'
 apply from: scriptsLocation + 'tests.gradle'
 apply from: scriptsLocation + 'jacoco.gradle' // jacoco java code coverage
 apply from: scriptsLocation + 'sonarqube.gradle' // sonarqube config
@@ -126,7 +125,7 @@ publishing {
 			from components.java
 			artifact sourcesJar
 			artifact javadocJar
-			artifact fatJar
+			artifact shadowJar
 			versionMapping {
 				usage('java-api') {
 					fromResolutionOf('runtimeClasspath')
@@ -152,7 +151,7 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-	mainClassName = mainClass
+	mainClassName = "edu.ie3.tools.Main"
 }
 
 jar {
@@ -166,4 +165,11 @@ jar {
 run {
 	// Gradle uses an empty Input as default, leading to a non-blocking behaviour and thus an immediate shutdown
 	standardInput = System.in
+}
+
+shadowJar {
+	transform(AppendingTransformer) {
+		resource = 'reference.conf'
+	}
+	zip64 = true
 }

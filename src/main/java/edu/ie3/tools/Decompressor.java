@@ -24,8 +24,8 @@ public class Decompressor implements Callable<Boolean> {
   public static final Logger filestatusLogger = LogManager.getLogger("FileStatus");
 
   private FileModel file;
-  private String inputFolderpath;
-  private String outputFolderpath;
+  private final String inputFolderpath;
+  private final String outputFolderpath;
 
   public Decompressor(FileModel file, String inputFolderpath, String outputFolderpath) {
     filestatusLogger.setLevel(Main.filestatus ? Level.ALL : Level.OFF);

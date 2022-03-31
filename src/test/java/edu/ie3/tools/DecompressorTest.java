@@ -58,7 +58,8 @@ public class DecompressorTest {
             ZonedDateTime.of(LocalDateTime.of(2018, 11, 25, 9, 0), ZoneId.of("UTC")),
             7,
             Parameter.U_216M);
-    Decompressor.decompress(file, decompresserFilesPath + File.separator);
+    Decompressor.decompress(
+        file, decompresserFilesPath + File.separator, decompresserFilesPath + File.separator);
     File gribFile =
         new File(
             decompresserFilesPath

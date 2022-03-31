@@ -258,4 +258,11 @@ public class FileModel implements Serializable {
   public File getGRIB22File(String folderpath) {
     return new File(folderpath + File.separator + getGRIB2FileName());
   }
+
+  public static String getFolderPath(String baseDirectory, ZonedDateTime currentModelrun) {
+    return baseDirectory
+        + File.separator
+        + FILENAME_DATE_FORMATTER.format(currentModelrun)
+        + File.separator;
+  }
 }

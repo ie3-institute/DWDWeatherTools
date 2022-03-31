@@ -16,7 +16,6 @@ import edu.ie3.tools.utils.DatabaseController;
 import edu.ie3.tools.utils.FileEraser;
 import edu.ie3.tools.utils.LockMechanism;
 import edu.ie3.tools.utils.enums.Parameter;
-import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.*;
@@ -176,11 +175,8 @@ public class Converter implements Runnable {
   }
 
   private void openArchiveFiles(ZonedDateTime currentModelrun, int timestep) {
-    String folderpath =
-        Main.directory
-            + File.separator
-            + FILENAME_DATE_FORMATTER.format(currentModelrun)
-            + File.separator;
+    String inputFolderPath = FileModel.getFolderPath(Main.directory, currentModelrun);
+    String outputFolderPath = FileModel.getFolderPath(Main.outputDirectory, currentModelrun);
     List<Decompressor> tasks = new ArrayList<>();
     List<FileModel> files = new ArrayList<>();
     for (Parameter param : Parameter.values()) {
@@ -191,7 +187,7 @@ public class Converter implements Runnable {
         files.add(file);
         if (file.isSufficient_size() && (file.isValid_file() == null || file.isValid_file())) {
           if (!file.isPersisted() && !file.isArchivefile_deleted() && !file.isDecompressed()) {
-            tasks.add(new Decompressor(file, folderpath));
+            tasks.add(new Decompressor(file, inputFolderPath, outputFolderPath));
           }
         } else if (file.getDownload_fails() > 3
             || file.getModelrun().isBefore(ZonedDateTime.now().minusDays(1))) {
@@ -237,8 +233,7 @@ public class Converter implements Runnable {
    * Deletes files using {@link FileEraser#eraseCallable(FileModel)} after completion.
    */
   public void convertTimeStep(ZonedDateTime modelrun, int timestep) {
-    String folderPath =
-        Main.directory + File.separator + FILENAME_DATE_FORMATTER.format(modelrun) + File.separator;
+    String folderPath = FileModel.getFolderPath(Main.outputDirectory, modelrun);
     convertTimeStep(modelrun, timestep, folderPath);
   }
 

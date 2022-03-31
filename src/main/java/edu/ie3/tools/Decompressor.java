@@ -7,7 +7,6 @@
 package edu.ie3.tools;
 
 import edu.ie3.tools.models.persistence.FileModel;
-import edu.ie3.tools.utils.enums.Parameter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,13 +24,15 @@ public class Decompressor implements Callable<Boolean> {
   public static final Logger filestatusLogger = LogManager.getLogger("FileStatus");
 
   private FileModel file;
-  private String folderpath;
+  private String inputFolderpath;
+  private String outputFolderpath;
 
-  public Decompressor(FileModel file, String folderpath) {
+  public Decompressor(FileModel file, String inputFolderpath, String outputFolderpath) {
     filestatusLogger.setLevel(Main.filestatus ? Level.ALL : Level.OFF);
     logger.setLevel(Main.debug ? Level.ALL : Level.INFO);
     this.file = file;
-    this.folderpath = folderpath;
+    this.inputFolderpath = inputFolderpath;
+    this.outputFolderpath = outputFolderpath;
   }
 
   /**
@@ -39,20 +40,25 @@ public class Decompressor implements Callable<Boolean> {
    *
    * @return success of decompression, including plausible file size
    */
-  public static boolean decompress(@NotNull FileModel file, String folderpath) {
+  public static boolean decompress(
+      @NotNull FileModel file, String inputFolderPath, String outputFolderpath) {
     boolean success = true;
 
-    String filenameFrom = folderpath + file.getBZ2FileName();
-    String filenameTo = folderpath + file.getGRIB2FileName();
+    String filenameFrom = inputFolderPath + file.getBZ2FileName();
+    String filenameTo = outputFolderpath + file.getGRIB2FileName();
 
     try (FileInputStream in = new FileInputStream(filenameFrom);
         FileOutputStream out = new FileOutputStream(filenameTo);
         BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(in)) {
       IOUtils.copy(bzIn, out);
     } catch (FileNotFoundException e) {
-      Parameter parameter = file.getParameter();
       logger.warn(
-          Converter.getFormattedTimestep(file) + "File not found for parameter " + parameter);
+          Converter.getFormattedTimestep(file)
+              + "Issue while creating file input stream for"
+              + filenameFrom
+              + " and file output stream for "
+              + filenameTo,
+          e);
       file.setArchivefile_deleted(true);
       filestatusLogger.trace(
           file.getName() + "  |  adt  |  archivefile_deleted = true  |  File not Found");
@@ -73,6 +79,6 @@ public class Decompressor implements Callable<Boolean> {
 
   @Override
   public Boolean call() {
-    return decompress(file, folderpath);
+    return decompress(file, inputFolderpath, outputFolderpath);
   }
 }

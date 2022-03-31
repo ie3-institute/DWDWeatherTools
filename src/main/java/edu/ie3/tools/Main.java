@@ -38,9 +38,14 @@ public class Main {
 
   @CommandLine.Option(
       names = {"-d", "--dir", "--directory"},
-      description =
-          "The directory used to write downloads to or read files from. Default: downloads")
+      description = "The directory used to read files from. Default: downloads")
   public static String directory = "downloads";
+
+  @CommandLine.Option(
+      names = {"-o", "-output"},
+      description =
+          "The directory used to write downloads to. Defaults to use the input directory.")
+  public static String outputDirectory = "";
 
   @CommandLine.Option(
       names = {"--timesteps"},
@@ -133,9 +138,9 @@ public class Main {
       commandLine.printVersionHelp(System.out);
       return;
     }
-    directory = directory.replace("\"", "").replace("'", "");
-    if (directory.endsWith(File.separator))
-      directory = directory.substring(0, directory.length() - 1).trim();
+    directory = cleanDirectory(directory);
+    if (outputDirectory.isEmpty()) outputDirectory = directory;
+    else outputDirectory = cleanDirectory(outputDirectory);
     eccodes = eccodes.replace("\"", "").replace("'", "");
     if (eccodes.endsWith(File.separator))
       eccodes = eccodes.substring(0, eccodes.length() - 1).trim();
@@ -145,6 +150,13 @@ public class Main {
     }
     if (doDownload) new Downloader().run();
     if (doConvert) new Converter().run();
+  }
+
+  public static String cleanDirectory(String directory) {
+    directory = directory.replace("\"", "").replace("'", "");
+    if (directory.endsWith(File.separator))
+      directory = directory.substring(0, directory.length() - 1).trim();
+    return directory;
   }
 
   public static Set<String> printProgramArguments() {

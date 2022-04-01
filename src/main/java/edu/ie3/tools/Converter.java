@@ -310,8 +310,7 @@ public class Converter implements Runnable {
     }
 
     // update the entities with the extraction results
-    entities
-        .parallelStream()
+    entities.parallelStream()
         .forEach(
             entity ->
                 // get each parameter from the extraction results and update the entity accordingly

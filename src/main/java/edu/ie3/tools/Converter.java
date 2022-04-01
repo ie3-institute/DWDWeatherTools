@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
  * @version 4.0
  */
 public class Converter implements Runnable {
+  private ZonedDateTime convertFrom;
+  private ZonedDateTime convertUntil;
   public static final Logger logger = LogManager.getLogger(Converter.class);
   public static final Logger fileStatusLogger = LogManager.getLogger("FileStatus");
 

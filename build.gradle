@@ -18,7 +18,7 @@ ext {
 	hibernateVersion = '5.3.3.Final'
 	log4jVersion = '2.17.1'
 	picoliVersion = '4.6.1'
-	javaVersion = JavaVersion.VERSION_1_8
+	javaVersion = JavaVersion.VERSION_17
 
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins
 	mainClass = 'edu.ie3.tools.Main'

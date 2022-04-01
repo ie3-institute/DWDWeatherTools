@@ -4,6 +4,7 @@ spotbugs{
 	ignoreFailures = true // dont let the build fail on rule violations
 	effort = 'max'
 	reportLevel = 'high'
+	excludeFilter = file('spotbugs-exclude.xml')
 }
 
 spotbugsMain{

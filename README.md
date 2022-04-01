@@ -94,7 +94,7 @@ If you want to provide this future feel free to hand in an issue or a pull reque
 ### Requirements
 * Unix based OS
 * [ecCodes](https://confluence.ecmwf.int//display/ECC/Releases) installed
-* JRE 1.8 installed
+* JRE 17 installed
 * access to a postgresql database
 * internet access
 * write permission on download directory

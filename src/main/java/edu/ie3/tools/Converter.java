@@ -77,7 +77,9 @@ public class Converter implements Runnable {
       printInit();
       validateConnectionProperties();
       convert();
-    } else logger.info("Converter is already running or you can't acquire a lock (in which case you might try sudo).");
+    } else
+      logger.info(
+          "Converter is already running or you can't acquire a lock (in which case you might try sudo).");
   }
 
   /** Validates Connection Properties from user input */

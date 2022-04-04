@@ -173,7 +173,7 @@ public class Extractor implements Callable<ExtractorResult> {
       if (e.getMessage().contains("Cannot run program")) {
         logger.error(
             e
-                + ". Are eccodes (https://confluence.ecmwf.int/display/ECC) installed and did you pass the correct path of the eccodes for a custom install location (-eccodes=<path-to-grib_get_data>)? ");
+                + ". Are eccodes (https://confluence.ecmwf.int/display/ECC) installed and did you pass the correct path of the eccodes (current path is " + eccodesLocation + " ) for a custom install location (-eccodes=<path-to-grib_get_data>)? ");
       } else {
         logger.error(e);
         validFile = false;

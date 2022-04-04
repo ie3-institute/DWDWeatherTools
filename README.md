@@ -71,7 +71,7 @@ the whole area.
 |vertical levels	| 60 level                              |
 |upper boundary	    | 22.5km                                |
 
-![](doc/img/icon-eu-nest.png)
+![](docs/readthedocs/_static/img/icon-eu-nest.png)
 
 
 In contrast, the converter area can be set in the code to the area of interest.
@@ -88,7 +88,7 @@ In the future it would make sense to provide the
 coordinates via a config file instead of hard-coding them into the binary.
 If you want to provide this future feel free to hand in an issue or a pull request.
 
-![](doc/img/converter_covered_area.jpg)
+![](docs/readthedocs/_static/img/converter_covered_area.jpg)
 
 
 ### Requirements

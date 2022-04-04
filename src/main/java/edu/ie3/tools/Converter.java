@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
  * @version 4.0
  */
 public class Converter implements Runnable {
+  private ZonedDateTime convertFrom;
+  private ZonedDateTime convertUntil;
   public static final Logger logger = LogManager.getLogger(Converter.class);
   public static final Logger fileStatusLogger = LogManager.getLogger("FileStatus");
 
@@ -50,23 +52,11 @@ public class Converter implements Runnable {
   private final ExecutorService fileEraserExecutor =
       Executors.newFixedThreadPool((int) Math.ceil(noOfProcessors / 3d));
 
-  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ") */
-  public static String getFormattedTimestep(@NotNull ZonedDateTime modelrun, int timestep) {
-    return "MR "
-        + MODEL_RUN_FORMATTER.format(modelrun)
-        + " - TS "
-        + String.format("%02d", timestep)
-        + " |    ";
-  }
+  public Converter() {}
 
-  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 | ") */
-  public static String getFormattedModelrun(@NotNull ZonedDateTime modelrun) {
-    return "MR " + MODEL_RUN_FORMATTER.format(modelrun) + "         |    ";
-  }
-
-  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ") */
-  public static String getFormattedTimestep(@NotNull FileModel file) {
-    return getFormattedTimestep(file.getModelrun(), file.getTimestep());
+  public Converter(ZonedDateTime convertFrom, ZonedDateTime convertUntil) {
+    this.convertFrom = convertFrom;
+    this.convertUntil = convertUntil;
   }
 
   @Override
@@ -76,8 +66,19 @@ public class Converter implements Runnable {
       logger.setLevel(Main.debug ? Level.ALL : Level.INFO);
       printInit();
       validateConnectionProperties();
-      convert();
+      if (this.convertFrom != null && this.convertUntil != null) {
+        convert(this.convertFrom, this.convertUntil);
+      } else {
+        convertUntilNewest();
+      }
     } else logger.info("Converter is already running.");
+  }
+
+  public void printInit() {
+    logger.info("________________________________________________________________________________");
+    logger.info("Converter started");
+    logger.trace("Program arguments:");
+    Main.printProgramArguments().forEach(s -> logger.trace("   " + s));
   }
 
   /** Validates Connection Properties from user input */
@@ -103,51 +104,47 @@ public class Converter implements Runnable {
     dbController = new DatabaseController(PERSISTENCE_UNIT_NAME, receivedProperties);
   }
 
-  public void printInit() {
-    logger.info("________________________________________________________________________________");
-    logger.info("Converter started");
-    logger.trace("Program arguments:");
-    Main.printProgramArguments().forEach(s -> logger.trace("   " + s));
+  private void convertUntilNewest() {
+    // retrieves the starting modelrun ( = oldest modelrun where persisted==false or no converter
+    // run info available)
+    ZonedDateTime currentModelrun =
+        (ZonedDateTime)
+            dbController.execSingleResultNamedQuery(
+                FileModel.OldestModelrunWithUnprocessedFiles, Collections.emptyList());
+
+    // retrieves the newest possible modelrun ( = newest downloaded modelrun)
+    ZonedDateTime newestPossibleModelrun =
+        (ZonedDateTime)
+            dbController.execSingleResultNamedQuery(
+                FileModel.NewestDownloadedModelrun, Collections.emptyList());
+
+    convert(currentModelrun, newestPossibleModelrun);
   }
 
-  private void convert() {
+  private void convert(ZonedDateTime start, ZonedDateTime end) {
     String formattedModelrun = "";
     try {
       fileEraser = new FileEraser(edu.ie3.tools.Main.directory, dbController);
 
-      // retrieves the newest possible modelrun ( = newest downloaded modelrun)
-      ZonedDateTime newestPossibleModelrun =
-          (ZonedDateTime)
-              dbController.execSingleResultNamedQuery(
-                  FileModel.NewestDownloadedModelrun, Collections.emptyList());
-
-      // retrieves the starting modelrun ( = oldest modelrun where persisted==false or no converter
-      // run info available)
-      ZonedDateTime currentModelrun =
-          (ZonedDateTime)
-              dbController.execSingleResultNamedQuery(
-                  FileModel.OldestModelrunWithUnprocessedFiles, Collections.emptyList());
-
-      if (currentModelrun != null) {
+      if (start != null) {
         coordinates = getCoordinates();
-        while (currentModelrun.isBefore(newestPossibleModelrun)
-            || currentModelrun.isEqual(newestPossibleModelrun)) {
+        while (start.isBefore(end) || start.isEqual(end)) {
           logger.info(
               "############################### "
-                  + MODEL_RUN_FORMATTER.format(currentModelrun)
+                  + MODEL_RUN_FORMATTER.format(start)
                   + " ###############################");
-          formattedModelrun = getFormattedModelrun(currentModelrun);
+          formattedModelrun = getFormattedModelrun(start);
           long tic;
           long toc;
           tic = System.currentTimeMillis();
           for (int timestep = 0; timestep < edu.ie3.tools.Main.timesteps; timestep++) {
-            handleTimestep(currentModelrun, timestep);
+            handleTimestep(start, timestep);
             dbController.flush();
           }
 
           toc = System.currentTimeMillis();
           logger.debug(formattedModelrun + "This modelrun took " + (toc - tic) / 60000 + "m \n");
-          currentModelrun = currentModelrun.plusHours(3); // increment modelrun
+          start = start.plusHours(3); // increment modelrun
         }
       }
     } catch (Exception e) {
@@ -155,6 +152,11 @@ public class Converter implements Runnable {
     } finally {
       shutdown();
     }
+  }
+
+  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 | ") */
+  public static String getFormattedModelrun(@NotNull ZonedDateTime modelrun) {
+    return "MR " + MODEL_RUN_FORMATTER.format(modelrun) + "         |    ";
   }
 
   /** opens archive files and converts the data for one timestep */
@@ -165,7 +167,7 @@ public class Converter implements Runnable {
     logger.info(formattedTimestep + "Opening of archive files started");
     long tic, toc;
     tic = System.currentTimeMillis();
-    openArchiveFiles(currentModelrun, timestep);
+    decompressGribFiles(currentModelrun, timestep);
     toc = System.currentTimeMillis();
     logger.info(
         formattedTimestep + "Opening of archive files finished (" + (toc - tic) / 1000 + "s)");
@@ -175,13 +177,33 @@ public class Converter implements Runnable {
     logger.info(formattedTimestep + "Timestep finished");
   }
 
-  private void openArchiveFiles(ZonedDateTime currentModelrun, int timestep) {
+  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ") */
+  public static String getFormattedTimestep(@NotNull ZonedDateTime modelrun, int timestep) {
+    return "MR "
+        + MODEL_RUN_FORMATTER.format(modelrun)
+        + " - TS "
+        + String.format("%02d", timestep)
+        + " |    ";
+  }
+
+  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ") */
+  public static String getFormattedTimestep(@NotNull FileModel file) {
+    return getFormattedTimestep(file.getModelrun(), file.getTimestep());
+  }
+
+  /**
+   * Decompresses all grib files that are intact for every parameter.
+   *
+   * @param currentModelrun the model run for which to decompress files
+   * @param timestep the time step that is currently handled
+   */
+  private void decompressGribFiles(ZonedDateTime currentModelrun, int timestep) {
     String folderpath =
         Main.directory
             + File.separator
             + FILENAME_DATE_FORMATTER.format(currentModelrun)
             + File.separator;
-    List<Decompressor> tasks = new ArrayList<>();
+    List<Decompressor> fileDecompressors = new ArrayList<>();
     List<FileModel> files = new ArrayList<>();
     for (Parameter param : Parameter.values()) {
       FileModel file =
@@ -189,30 +211,18 @@ public class Converter implements Runnable {
               FileModel.class, FileModel.createFileName(currentModelrun, timestep, param));
       if (file != null) {
         files.add(file);
-        if (file.isSufficient_size() && (file.isValid_file() == null || file.isValid_file())) {
+        // add file to the files to decompress if it's valid
+        if (isFileIntact(file)) {
           if (!file.isPersisted() && !file.isArchivefile_deleted() && !file.isDecompressed()) {
-            tasks.add(new Decompressor(file, folderpath));
+            fileDecompressors.add(new Decompressor(file, folderpath));
           }
-        } else if (file.getDownload_fails() > 3
-            || file.getModelrun().isBefore(ZonedDateTime.now().minusDays(1))) {
-          if (edu.ie3.tools.Main.deleteDownloadedFiles) {
-            logger.trace(
-                "Delete file "
-                    + file.getName()
-                    + " because it did not have a valid size or content.");
-            fileEraserExecutor.submit(fileEraser.eraseCallable(file));
-          } else {
-            logger.trace(
-                "File "
-                    + file.getName()
-                    + " did not have a valid size or content. If you want to delete it pass -del as argument!");
-          }
-        }
+        } else handleBrokenFile(file);
       }
     }
 
     try {
-      decompressionExecutor.invokeAll(tasks);
+      // actual decompression of files
+      decompressionExecutor.invokeAll(fileDecompressors);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -226,6 +236,37 @@ public class Converter implements Runnable {
                 file.getName() + "  |  vff  |  valid_file = false  | Decompression failed");
           }
         });
+  }
+
+  /**
+   * Checks if file is sufficiently large and is valid
+   *
+   * @param file the file to check
+   * @return whether it is intact or not
+   */
+  private Boolean isFileIntact(FileModel file) {
+    return file.isSufficient_size() && (file.isValid_file() == null || file.isValid_file());
+  }
+
+  /**
+   * Either delete broken file or log it depending on configuration.
+   *
+   * @param file the broken file to handle
+   */
+  private void handleBrokenFile(FileModel file) {
+    if (file.getDownloadFails() > 3
+        || file.getModelrun().isBefore(ZonedDateTime.now().minusDays(1))) {
+      if (edu.ie3.tools.Main.deleteDownloadedFiles) {
+        logger.trace(
+            "Delete file " + file.getName() + " because it did not have a valid size or content.");
+        fileEraserExecutor.submit(fileEraser.eraseCallable(file));
+      } else {
+        logger.trace(
+            "File "
+                + file.getName()
+                + " did not have a valid size or content. If you want to delete it pass -del as argument!");
+      }
+    }
   }
 
   /**
@@ -485,10 +526,10 @@ public class Converter implements Runnable {
 
   private Collection<CoordinateModel> getCoordinates() {
     HashMap<String, Object> namedCoordinateParams = new HashMap<>();
-    namedCoordinateParams.put("minLatitude", Main.minLatitude);
-    namedCoordinateParams.put("maxLatitude", Main.maxLatitude);
-    namedCoordinateParams.put("minLongitude", Main.minLongitude);
-    namedCoordinateParams.put("maxLongitude", Main.maxLongitude);
+    namedCoordinateParams.put("minLatitude", Main.MIN_LATITUDE);
+    namedCoordinateParams.put("maxLatitude", Main.MAX_LATITUDE);
+    namedCoordinateParams.put("minLongitude", Main.MIN_LONGITUDE);
+    namedCoordinateParams.put("maxLongitude", Main.MAX_LONGITUDE);
     return dbController.execNamedQuery(
         CoordinateModel.CoordinatesInRectangle, namedCoordinateParams);
   }

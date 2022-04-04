@@ -275,7 +275,8 @@ public class DatabaseController {
     manager.joinTransaction();
   }
 
-  /** Looks for an object within the database via using its class and primary key
+  /**
+   * Looks for an object within the database via using its class and primary key
    *
    * @param clazz the class representation of the object to look for
    * @param id the primary key
@@ -325,13 +326,13 @@ public class DatabaseController {
     return objs;
   }
 
-  /** Execute a named query. Named queries are defined in @NamedQueries sections and are SQL queries that can be used
-   *  as arguments via their respective name.
+  /**
+   * Execute a named query. Named queries are defined in @NamedQueries sections and are SQL queries
+   * that can be used as arguments via their respective name.
    *
    * @param queryName the name of the query to execute
    * @param params additional parameters to set within the named query
    * @return the result of the query as a generic object
-   *
    */
   public Object execSingleResultNamedQuery(String queryName, List params) {
     Object res = null;

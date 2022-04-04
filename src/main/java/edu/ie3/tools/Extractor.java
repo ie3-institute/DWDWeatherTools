@@ -42,8 +42,10 @@ public class Extractor implements Callable<ExtractorResult> {
     formattedTimestep = Converter.getFormattedTimestep(file);
   }
 
-  /** Checks headline of grib file whether it is valid. Since eccodes v2.21.0 the data extraction expects a headline w/o
-   *  commas but with whitespaces see ECC-1197 - https://jira.ecmwf.int/browse/ECC-1197
+  /**
+   * Checks headline of grib file whether it is valid. Since eccodes v2.21.0 the data extraction
+   * expects a headline w/o commas but with whitespaces see ECC-1197 -
+   * https://jira.ecmwf.int/browse/ECC-1197
    *
    * @param headlineString the headline string
    * @return whether it is valid or not
@@ -56,9 +58,9 @@ public class Extractor implements Callable<ExtractorResult> {
         && (headlineString.trim().equals(headline) || headlineString.trim().equals(oldHeadline));
   }
 
-  /** Parses the output of a parameter grib file. And returns a map from coordinate where the value was measured to actual value
-   *  fixme: coordinate without id?
-   *
+  /**
+   * Parses the output of a parameter grib file. And returns a map from coordinate where the value
+   * was measured to actual value fixme: coordinate without id?
    *
    * @param reader the reader of the grib file input stream
    * @return map from coordinate where the value was measured to actual value
@@ -173,7 +175,9 @@ public class Extractor implements Callable<ExtractorResult> {
       if (e.getMessage().contains("Cannot run program")) {
         logger.error(
             e
-                + ". Are eccodes (https://confluence.ecmwf.int/display/ECC) installed and did you pass the correct path of the eccodes (current path is " + eccodesLocation + " ) for a custom install location (-eccodes=<path-to-grib_get_data>)? ");
+                + ". Are eccodes (https://confluence.ecmwf.int/display/ECC) installed and did you pass the correct path of the eccodes (current path is "
+                + eccodesLocation
+                + " ) for a custom install location (-eccodes=<path-to-grib_get_data>)? ");
       } else {
         logger.error(e);
         validFile = false;

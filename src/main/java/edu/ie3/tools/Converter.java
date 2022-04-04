@@ -52,7 +52,7 @@ public class Converter implements Runnable {
   private final ExecutorService fileEraserExecutor =
       Executors.newFixedThreadPool((int) Math.ceil(noOfProcessors / 3d));
 
-  public Converter(){}
+  public Converter() {}
 
   public Converter(ZonedDateTime convertFrom, ZonedDateTime convertUntil) {
     this.convertFrom = convertFrom;
@@ -66,10 +66,9 @@ public class Converter implements Runnable {
       logger.setLevel(Main.debug ? Level.ALL : Level.INFO);
       printInit();
       validateConnectionProperties();
-      if (this.convertFrom != null && this.convertUntil != null){
+      if (this.convertFrom != null && this.convertUntil != null) {
         convert(this.convertFrom, this.convertUntil);
-      }
-      else {
+      } else {
         convertUntilNewest();
       }
     } else logger.info("Converter is already running.");
@@ -109,19 +108,18 @@ public class Converter implements Runnable {
     // retrieves the starting modelrun ( = oldest modelrun where persisted==false or no converter
     // run info available)
     ZonedDateTime currentModelrun =
-            (ZonedDateTime)
-                    dbController.execSingleResultNamedQuery(
-                            FileModel.OldestModelrunWithUnprocessedFiles, Collections.emptyList());
+        (ZonedDateTime)
+            dbController.execSingleResultNamedQuery(
+                FileModel.OldestModelrunWithUnprocessedFiles, Collections.emptyList());
 
     // retrieves the newest possible modelrun ( = newest downloaded modelrun)
     ZonedDateTime newestPossibleModelrun =
-            (ZonedDateTime)
-                    dbController.execSingleResultNamedQuery(
-                            FileModel.NewestDownloadedModelrun, Collections.emptyList());
+        (ZonedDateTime)
+            dbController.execSingleResultNamedQuery(
+                FileModel.NewestDownloadedModelrun, Collections.emptyList());
 
     convert(currentModelrun, newestPossibleModelrun);
   }
-
 
   private void convert(ZonedDateTime start, ZonedDateTime end) {
     String formattedModelrun = "";
@@ -130,8 +128,7 @@ public class Converter implements Runnable {
 
       if (start != null) {
         coordinates = getCoordinates();
-        while (start.isBefore(end)
-            || start.isEqual(end)) {
+        while (start.isBefore(end) || start.isEqual(end)) {
           logger.info(
               "############################### "
                   + MODEL_RUN_FORMATTER.format(start)
@@ -183,10 +180,10 @@ public class Converter implements Runnable {
   /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ") */
   public static String getFormattedTimestep(@NotNull ZonedDateTime modelrun, int timestep) {
     return "MR "
-            + MODEL_RUN_FORMATTER.format(modelrun)
-            + " - TS "
-            + String.format("%02d", timestep)
-            + " |    ";
+        + MODEL_RUN_FORMATTER.format(modelrun)
+        + " - TS "
+        + String.format("%02d", timestep)
+        + " |    ";
   }
 
   /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ") */
@@ -194,7 +191,8 @@ public class Converter implements Runnable {
     return getFormattedTimestep(file.getModelrun(), file.getTimestep());
   }
 
-  /** Decompresses all grib files that are intact for every parameter.
+  /**
+   * Decompresses all grib files that are intact for every parameter.
    *
    * @param currentModelrun the model run for which to decompress files
    * @param timestep the time step that is currently handled
@@ -240,33 +238,33 @@ public class Converter implements Runnable {
         });
   }
 
-  /** Checks if file is sufficiently large and is valid
+  /**
+   * Checks if file is sufficiently large and is valid
    *
    * @param file the file to check
    * @return whether it is intact or not
    */
-  private Boolean isFileIntact(FileModel file){
+  private Boolean isFileIntact(FileModel file) {
     return file.isSufficient_size() && (file.isValid_file() == null || file.isValid_file());
   }
 
-  /** Either delete broken file or log it depending on configuration.
+  /**
+   * Either delete broken file or log it depending on configuration.
    *
    * @param file the broken file to handle
    */
-  private void handleBrokenFile(FileModel file){
+  private void handleBrokenFile(FileModel file) {
     if (file.getDownloadFails() > 3
-          || file.getModelrun().isBefore(ZonedDateTime.now().minusDays(1))) {
+        || file.getModelrun().isBefore(ZonedDateTime.now().minusDays(1))) {
       if (edu.ie3.tools.Main.deleteDownloadedFiles) {
         logger.trace(
-                "Delete file "
-                        + file.getName()
-                        + " because it did not have a valid size or content.");
+            "Delete file " + file.getName() + " because it did not have a valid size or content.");
         fileEraserExecutor.submit(fileEraser.eraseCallable(file));
       } else {
         logger.trace(
-                "File "
-                        + file.getName()
-                        + " did not have a valid size or content. If you want to delete it pass -del as argument!");
+            "File "
+                + file.getName()
+                + " did not have a valid size or content. If you want to delete it pass -del as argument!");
       }
     }
   }

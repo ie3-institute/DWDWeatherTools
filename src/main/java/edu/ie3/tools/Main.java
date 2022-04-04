@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
-
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -63,13 +62,13 @@ public class Main {
   public static boolean doConvert;
 
   @CommandLine.Option(
-          names = {"-convert_from"},
-          description = "Start datetime of conversion.")
+      names = {"-convert_from"},
+      description = "Start datetime of conversion.")
   public static String convertFrom;
 
   @CommandLine.Option(
-          names = {"-convert_until"},
-          description = "End datetime of conversion.")
+      names = {"-convert_until"},
+      description = "End datetime of conversion.")
   public static String convertUntil;
 
   @CommandLine.Option(
@@ -161,15 +160,17 @@ public class Main {
 
     if (doConvert) {
       if (convertFrom != null && convertUntil != null) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC")).withLocale(Locale.GERMANY);
+        DateTimeFormatter dateTimeFormatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                .withZone(ZoneId.of("UTC"))
+                .withLocale(Locale.GERMANY);
         ZonedDateTime from = ZonedDateTime.parse(convertFrom, dateTimeFormatter);
         ZonedDateTime until = ZonedDateTime.parse(convertUntil, dateTimeFormatter);
         new Converter(from, until).run();
-      }
-      else if (convertFrom != null || convertUntil != null){
-        throw new IllegalArgumentException("Either convertFrom or convertTo is missing. We need both to convert data for a specific interval");
-      }
-      else {
+      } else if (convertFrom != null || convertUntil != null) {
+        throw new IllegalArgumentException(
+            "Either convertFrom or convertTo is missing. We need both to convert data for a specific interval");
+      } else {
         new Downloader().run();
       }
     }

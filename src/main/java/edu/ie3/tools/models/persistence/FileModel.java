@@ -106,7 +106,9 @@ public class FileModel implements Serializable {
     this.name = name;
   }
 
-  /** Creates the correct file name within the icon model for a parameter within a given time step for a given model run
+  /**
+   * Creates the correct file name within the icon model for a parameter within a given time step
+   * for a given model run
    *
    * @param modelrun the model run to consider
    * @param timestep the time step to check
@@ -205,7 +207,8 @@ public class FileModel implements Serializable {
     this.persisted = persisted;
   }
 
-  /** Checks if the raw file downloaded from the model run is deleted.
+  /**
+   * Checks if the raw file downloaded from the model run is deleted.
    *
    * @return whether it is deleted or not
    */

@@ -14,7 +14,7 @@ plugins {
 	id 'com.github.onslip.gradle-one-jar' version '1.0.6' // pack a self contained jar
 	id 'jacoco' // java code coverage plugin
 	id "org.sonarqube" version "3.3" // sonarqube
-	id "com.github.johnrengelman.shadow" version "6.1.0" // fat jar
+	id "com.github.johnrengelman.shadow" version "7.1.2" // fat jar
 }
 
 ext {

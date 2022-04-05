@@ -7,6 +7,7 @@
 package edu.ie3.tools;
 
 import edu.ie3.tools.models.persistence.FileModel;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -46,7 +47,10 @@ public class Decompressor implements Callable<Boolean> {
 
     String filenameFrom = inputFolderPath + file.getBZ2FileName();
     String filenameTo = outputFolderpath + file.getGRIB2FileName();
-
+    File outputFolder = new File(outputFolderpath);
+    if (!outputFolder.exists()) {
+      outputFolder.mkdirs();
+    }
     try (FileInputStream in = new FileInputStream(filenameFrom);
         FileOutputStream out = new FileOutputStream(filenameTo);
         BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(in)) {

@@ -16,8 +16,8 @@ plugins {
 ext {
 	//version (changing these should be considered thoroughly!)
 	hibernateVersion = '5.3.3.Final'
-	log4jVersion = '2.17.1'
-	picoliVersion = '4.6.1'
+	log4jVersion = '2.17.2'
+	picoliVersion = '4.6.3'
 	javaVersion = JavaVersion.VERSION_17
 
 	scriptsLocation = 'gradle' + File.separator + 'scripts' + File.separator //location of script plugins

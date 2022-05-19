@@ -50,7 +50,9 @@ public class Converter implements Runnable {
   private final ExecutorService fileEraserExecutor =
       Executors.newFixedThreadPool((int) Math.ceil(noOfProcessors / 3d));
 
-  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ") */
+  /**
+   * @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ")
+   */
   public static String getFormattedTimestep(@NotNull ZonedDateTime modelrun, int timestep) {
     return "MR "
         + MODEL_RUN_FORMATTER.format(modelrun)
@@ -59,12 +61,16 @@ public class Converter implements Runnable {
         + " |    ";
   }
 
-  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 | ") */
+  /**
+   * @return timestamp for logging output (e.g "MR 09.10.2018 18:00 | ")
+   */
   public static String getFormattedModelrun(@NotNull ZonedDateTime modelrun) {
     return "MR " + MODEL_RUN_FORMATTER.format(modelrun) + "         |    ";
   }
 
-  /** @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ") */
+  /**
+   * @return timestamp for logging output (e.g "MR 09.10.2018 18:00 - TS 01 | ")
+   */
   public static String getFormattedTimestep(@NotNull FileModel file) {
     return getFormattedTimestep(file.getModelrun(), file.getTimestep());
   }

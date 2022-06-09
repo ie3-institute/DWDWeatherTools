@@ -4,11 +4,6 @@
 // general config values
 ////////////////////////////////
 
-
-//// Rocket.Chat channel to publish updates
-final String rocketChatChannel = "jenkins"
-
-
 //// project build dir order
 //// this list contains the build order
 //// normally it *should* start with the project under investigation
@@ -93,12 +88,6 @@ if (env.BRANCH_NAME == "master") {
 
     // deployment only
     if (params.triggered == "true") {
-        // notify rocket chat about the started master branch deployment
-        rocketSend attachments: [],
-                channel: rocketChatChannel,
-                message: ":jenkins_triggered:\n" +
-                        "*deploy* manually triggered on master branch of ${projects.get(0)}."
-        rawMessage: true
 
         node {
             // This displays colors using the 'xterm' ansi color map.
@@ -137,31 +126,16 @@ if (env.BRANCH_NAME == "master") {
 
                         /**
                          * Post processing
-                         * Publish reports and notify rocket chat
+                         * Publish reports
                          * Future clean workspace processes should be declared here
                          */
                         stage('post processing') {
                             // publish reports
                             // publishReports()
 
-                            // notify rocket chat about success
-                            String buildMode = "deploy"
-                            String branchName = params.pull_request_head_label
-
-                            rocketSend attachments: [
-                                    [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
-                                    channel: rocketChatChannel,
-                                    message: ":jenkins_party: \n" +
-                                            "${buildMode} successful!\n" +
-                                            "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                            "*branch:* ${branchName} \n" +
-                                            "*deployedArtifacts:* ${deployedArtifacts}\n"
-                            rawMessage: true
-
                             // set build to successfull
                             currentBuild.result = 'SUCCESS'
                         }
-
 
                     }
 
@@ -170,18 +144,6 @@ if (env.BRANCH_NAME == "master") {
 
                     String buildMode = "deploy"
                     String branchName = params.pull_request_head_label
-
-                    // notify rocketchat about failure
-                    rocketSend attachments: [
-                            [$class: 'MessageAttachment', color: 'red', title: 'go to logs', titleLink: env.BUILD_URL],],
-                            channel: rocketChatChannel,
-                            message: ":jenkins_explode: \n" +
-                                    "${buildMode}  failed!\n" +
-                                    "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                    "*branch:* ${branchName} \n" +
-                                    "*errorMessage:* ${stageErrorMessage}\n" +
-                                    "See logs for details.",
-                            rawMessage: true
 
                     // publish reports even on failure
                     publishReports()
@@ -195,13 +157,6 @@ if (env.BRANCH_NAME == "master") {
     } else {
 
         // merge into master
-        // notify rocket chat about the started master branch deployment
-        rocketSend attachments: [],
-                channel: rocketChatChannel,
-                message: ":jenkins_triggered:\n" +
-                        "*deploy* triggered by merge ${params.pull_request_title} into master of ${projects.get(0)}."
-        rawMessage: true
-
         node {
             // This displays colors using the 'xterm' ansi color map.
             ansiColor('xterm') {
@@ -282,27 +237,12 @@ if (env.BRANCH_NAME == "master") {
 
                     /**
                      * Post processing
-                     * Publish reports and notify rocket chat
+                     * Publish reports
                      * Future clean workspace processes should be declared here
                      */
                     stage('post processing') {
                         // publish reports
                         publishReports()
-
-                        // notify rocket chat about success
-                        String buildMode = "merge"
-                        String branchName = params.pull_request_head_label
-
-                        rocketSend attachments: [
-                                [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
-                                channel: rocketChatChannel,
-                                message: ":jenkins_party: \n" +
-                                        "${buildMode} successful!\n" +
-                                        "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                        "*branch:* ${branchName} \n" +
-                                        "*deployedArtifacts:* ${deployedArtifacts}\n"
-                        rawMessage: true
-
                     }
 
                 } catch (exc) {
@@ -314,18 +254,6 @@ if (env.BRANCH_NAME == "master") {
                     if (stageErrorMessage == 'Not a merge. Abort!') {
                         buildMode = ""
                     }
-
-                    // notify rocketchat about failure
-                    rocketSend attachments: [
-                            [$class: 'MessageAttachment', color: 'red', title: 'go to logs', titleLink: env.BUILD_URL],],
-                            channel: rocketChatChannel,
-                            message: ":jenkins_explode: \n" +
-                                    "${buildMode}  failed!\n" +
-                                    "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                    "*branch:* ${branchName} \n" +
-                                    "*errorMessage:* ${stageErrorMessage}\n" +
-                                    "See logs for details.",
-                            rawMessage: true
 
                     // publish reports even on failure
                     publishReports()
@@ -365,26 +293,8 @@ if (env.BRANCH_NAME == "master") {
 
                 /// if the pipeline is scanned we don't want to execute anything
                 if (params.triggered == "true") {
-                    // notify rocket chat about the started master branch deployment
-                    rocketSend attachments: [],
-                            channel: rocketChatChannel,
-                            message: ":jenkins_triggered:\n" +
-                                    "*PR test* manually triggered on master branch of ${projects.get(0)}."
-                    rawMessage: true
-
                     log(i, "PR test manually triggered by user.")
-
                 } else {
-                    // notify rocket chat about the started PR run
-                    rocketSend attachments: [],
-                            channel: rocketChatChannel,
-                            message: ":jenkins_triggered:\n" +
-                                    "*forcedPR* triggered with parameters:\n" +
-                                    "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                    "*branch:* ${params.issue_title}\n" +
-                                    "*triggeredBy:* ${params.sender_login}",
-                            rawMessage: true
-
                     log(i, "forced PR triggered by webhook. Parameters are:")
                     log(i, "issue_title: ${params.issue_title}")
                     log(i, "comment_body: ${params.comment_body}")
@@ -439,24 +349,12 @@ if (env.BRANCH_NAME == "master") {
 
                 /**
                  * Post processing
-                 * Publish reports and notify rocket chat
+                 * Publish reports
                  * Future clean workspace processes should be declared here
                  */
                 stage('post processing') {
                     // publish reports
                     publishReports()
-
-                    // notify rocket chat about success
-                    String buildMode = "forcedPR"
-
-                    rocketSend attachments: [
-                            [$class: 'MessageAttachment', color: 'green', title: 'go to logs', titleLink: env.BUILD_URL],],
-                            channel: rocketChatChannel,
-                            message: ":jenkins_party: \n" +
-                                    "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                    "${buildMode} successful!\n" +
-                                    "*branch:* ${featureBranchName}"
-                    rawMessage: true
                 }
 
             } catch (Exception exc) {
@@ -470,18 +368,6 @@ if (env.BRANCH_NAME == "master") {
                 }
 
                 println("[ERROR] [${date.format("dd/MM/yyyy")} - ${date.format("HH:mm:ss")}]" + exc)
-
-                // notify rocketchat about failure
-                rocketSend attachments: [
-                        [$class: 'MessageAttachment', color: 'red', title: 'go to logs', titleLink: env.BUILD_URL],],
-                        channel: rocketChatChannel,
-                        message: ":jenkins_explode: \n" +
-                                "${buildMode}  failed!\n" +
-                                "*repo:* ${urls.get(0)}/${projects.get(0)}\n" +
-                                "*branch:* ${branchName} \n" +
-                                "*errorMessage:* ${stageErrorMessage}\n" +
-                                "See logs for details.",
-                        rawMessage: true
 
                 // publish reports even on failure
                 publishReports()

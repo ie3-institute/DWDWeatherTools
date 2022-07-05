@@ -1,5 +1,5 @@
 plugins {
-	id "com.jfrog.artifactory" version "4.28.3" //artifactory support
+	id "com.jfrog.artifactory" version "4.28.4" //artifactory support
 	id 'groovy' // groovy support
 	id 'java' // java support
 	id 'application' // creates a JVM executable

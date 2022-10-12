@@ -1,0 +1,6 @@
+<FindBugsFilter>
+    <Match>
+        <Class name="edu.ie3.tools.Main" />
+        <Bug code="MS" />
+    </Match>
+</FindBugsFilter>

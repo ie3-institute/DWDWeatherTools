@@ -13,11 +13,11 @@ import java.time.ZonedDateTime;
 public class ICONWeatherKey implements Serializable {
 
   private CoordinateModel coordinate;
-  private ZonedDateTime date;
+  private ZonedDateTime time;
 
-  public ICONWeatherKey(CoordinateModel coordinate, ZonedDateTime date) {
+  public ICONWeatherKey(CoordinateModel coordinate, ZonedDateTime time) {
     this.coordinate = coordinate;
-    this.date = date;
+    this.time = time;
   }
 
   public ICONWeatherKey() {}
@@ -30,16 +30,16 @@ public class ICONWeatherKey implements Serializable {
     this.coordinate = coordinate;
   }
 
-  public ZonedDateTime getDate() {
-    return date;
+  public ZonedDateTime getTime() {
+    return time;
   }
 
-  public void setDate(ZonedDateTime date) {
-    this.date = date;
+  public void setTime(ZonedDateTime date) {
+    this.time = date;
   }
 
   @Override
   public String toString() {
-    return "ICONWeatherKey{" + "coordinate=" + coordinate + ", date=" + date + '}';
+    return "ICONWeatherKey{" + "coordinate=" + coordinate + ", time=" + time + '}';
   }
 }

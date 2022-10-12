@@ -412,7 +412,7 @@ public class Converter implements Runnable {
   private List<ICONWeatherModel> checkForPreviousEntries(List<ICONWeatherModel> entities) {
     LinkedList<ICONWeatherModel> checkedEntities = new LinkedList<>();
     Map<ZonedDateTime, List<ICONWeatherModel>> entitiesByDate =
-        entities.stream().collect(Collectors.groupingBy(ICONWeatherModel::getDate));
+        entities.stream().collect(Collectors.groupingBy(ICONWeatherModel::getTime));
     entitiesByDate.forEach(
         (date, entitiesAtDate) ->
             checkedEntities.addAll(checkForPreviousEntries(entitiesAtDate, date)));

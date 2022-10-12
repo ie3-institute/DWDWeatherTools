@@ -5,7 +5,7 @@ CREATE TABLE icon.icon_coordinates (
     coordinate_type character varying(255), CONSTRAINT pk_icon_coordinates PRIMARY KEY (id));
 
 CREATE TABLE icon.weather (
-    datum timestamp without time zone NOT NULL, alb_rad double precision, asob_s double precision,
+    time timestamp without time zone NOT NULL, alb_rad double precision, asob_s double precision,
     aswdifd_s double precision, aswdifu_s double precision, aswdir_s double precision, sobs_rad double precision,
     p_20m double precision, p_65m double precision, p_131m double precision,
     t_131m double precision, t_2m double precision, t_g double precision, u_10m double precision,
@@ -14,7 +14,7 @@ CREATE TABLE icon.weather (
     v_65m double precision, w_131m double precision, w_20m double precision, w_216m double precision,
     w_65m double precision, z0 double precision,
     coordinate_id integer NOT NULL,
-    CONSTRAINT pk_weather PRIMARY KEY (coordinate_id, datum),
+    CONSTRAINT pk_weather PRIMARY KEY (coordinate_id, time),
     CONSTRAINT fk_weather_coordinates FOREIGN KEY (coordinate_id) REFERENCES icon.icon_coordinates (id)
         MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION);
 

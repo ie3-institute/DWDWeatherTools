@@ -65,7 +65,7 @@ public class ICONWeatherModelTest {
     ICONWeatherModel newWeather = new ICONWeatherModel(date, coordinate);
     interpolatedEntity.setDate(date);
     interpolatedEntity.setCoordinate(coordinate);
-    newWeather.setAlb_rad(alb_rad);
+    newWeather.setAlbRad(alb_rad);
 
     interpolatedEntity = ICONWeatherModel.getInterpolatedEntity(weather, newWeather);
     interpolatedEntity.setDate(date);
@@ -85,32 +85,32 @@ public class ICONWeatherModelTest {
     interpolatedEntity.setDate(date);
     interpolatedEntity.setCoordinate(coordinate);
 
-    assertEquals(collectedParameterValues.get("alb_rad") / 10, interpolatedEntity.getAlb_rad());
-    assertEquals(collectedParameterValues.get("asob_s") / 10, interpolatedEntity.getAsob_s());
-    assertEquals(collectedParameterValues.get("aswdifd_s") / 10, interpolatedEntity.getAswdifd_s());
-    assertEquals(collectedParameterValues.get("aswdifu_s") / 10, interpolatedEntity.getAswdifu_s());
-    assertEquals(collectedParameterValues.get("aswdirs_s") / 10, interpolatedEntity.getAswdirs_s());
-    assertEquals(collectedParameterValues.get("sobs_rad") / 10, interpolatedEntity.getSobs_rad());
-    assertEquals(collectedParameterValues.get("p_20m") / 10, interpolatedEntity.getP_20m());
-    assertEquals(collectedParameterValues.get("p_65m") / 10, interpolatedEntity.getP_65m());
-    assertEquals(collectedParameterValues.get("p_131m") / 10, interpolatedEntity.getP_131m());
-    assertEquals(collectedParameterValues.get("t_131m") / 10, interpolatedEntity.getT_131m());
-    assertEquals(collectedParameterValues.get("t_2m") / 10, interpolatedEntity.getT_2m());
-    assertEquals(collectedParameterValues.get("t_g") / 10, interpolatedEntity.getT_g());
-    assertEquals(collectedParameterValues.get("u_10m") / 10, interpolatedEntity.getU_10m());
-    assertEquals(collectedParameterValues.get("u_131m") / 10, interpolatedEntity.getU_131m());
-    assertEquals(collectedParameterValues.get("u_20m") / 10, interpolatedEntity.getU_20m());
-    assertEquals(collectedParameterValues.get("u_216m") / 10, interpolatedEntity.getU_216m());
-    assertEquals(collectedParameterValues.get("u_65m") / 10, interpolatedEntity.getU_65m());
-    assertEquals(collectedParameterValues.get("v_10m") / 10, interpolatedEntity.getV_10m());
-    assertEquals(collectedParameterValues.get("v_131m") / 10, interpolatedEntity.getV_131m());
-    assertEquals(collectedParameterValues.get("v_20m") / 10, interpolatedEntity.getV_20m());
-    assertEquals(collectedParameterValues.get("v_216m") / 10, interpolatedEntity.getV_216m());
-    assertEquals(collectedParameterValues.get("v_65m") / 10, interpolatedEntity.getV_65m());
-    assertEquals(collectedParameterValues.get("w_131m") / 10, interpolatedEntity.getW_131m());
-    assertEquals(collectedParameterValues.get("w_20m") / 10, interpolatedEntity.getW_20m());
-    assertEquals(collectedParameterValues.get("w_216m") / 10, interpolatedEntity.getW_216m());
-    assertEquals(collectedParameterValues.get("w_65m") / 10, interpolatedEntity.getW_65m());
+    assertEquals(collectedParameterValues.get("alb_rad") / 10, interpolatedEntity.getAlbRad());
+    assertEquals(collectedParameterValues.get("asob_s") / 10, interpolatedEntity.getAsobS());
+    assertEquals(collectedParameterValues.get("aswdifd_s") / 10, interpolatedEntity.getAswdifdS());
+    assertEquals(collectedParameterValues.get("aswdifu_s") / 10, interpolatedEntity.getAswdifuS());
+    assertEquals(collectedParameterValues.get("aswdirs_s") / 10, interpolatedEntity.getAswdirS());
+    assertEquals(collectedParameterValues.get("sobs_rad") / 10, interpolatedEntity.getSobsRad());
+    assertEquals(collectedParameterValues.get("p_20m") / 10, interpolatedEntity.getP20m());
+    assertEquals(collectedParameterValues.get("p_65m") / 10, interpolatedEntity.getP65m());
+    assertEquals(collectedParameterValues.get("p_131m") / 10, interpolatedEntity.getP131m());
+    assertEquals(collectedParameterValues.get("t_131m") / 10, interpolatedEntity.getT131m());
+    assertEquals(collectedParameterValues.get("t_2m") / 10, interpolatedEntity.getT2m());
+    assertEquals(collectedParameterValues.get("t_g") / 10, interpolatedEntity.getTG());
+    assertEquals(collectedParameterValues.get("u_10m") / 10, interpolatedEntity.getU10m());
+    assertEquals(collectedParameterValues.get("u_131m") / 10, interpolatedEntity.getU131m());
+    assertEquals(collectedParameterValues.get("u_20m") / 10, interpolatedEntity.getU20m());
+    assertEquals(collectedParameterValues.get("u_216m") / 10, interpolatedEntity.getU216m());
+    assertEquals(collectedParameterValues.get("u_65m") / 10, interpolatedEntity.getU65m());
+    assertEquals(collectedParameterValues.get("v_10m") / 10, interpolatedEntity.getV10m());
+    assertEquals(collectedParameterValues.get("v_131m") / 10, interpolatedEntity.getV131m());
+    assertEquals(collectedParameterValues.get("v_20m") / 10, interpolatedEntity.getV20m());
+    assertEquals(collectedParameterValues.get("v_216m") / 10, interpolatedEntity.getV216m());
+    assertEquals(collectedParameterValues.get("v_65m") / 10, interpolatedEntity.getV65m());
+    assertEquals(collectedParameterValues.get("w_131m") / 10, interpolatedEntity.getW131m());
+    assertEquals(collectedParameterValues.get("w_20m") / 10, interpolatedEntity.getW20m());
+    assertEquals(collectedParameterValues.get("w_216m") / 10, interpolatedEntity.getW216m());
+    assertEquals(collectedParameterValues.get("w_65m") / 10, interpolatedEntity.getW65m());
     assertEquals(collectedParameterValues.get("z0") / 10, interpolatedEntity.getZ0());
   }
 
@@ -153,15 +153,15 @@ public class ICONWeatherModelTest {
   @Test
   public void setParameter() {
     weather.setParameter(Parameter.ASOB_S, 1.337);
-    assertEquals(1.337, weather.getAsob_s()); // value changed
+    assertEquals(1.337, weather.getAsobS()); // value changed
     weather.setParameter(Parameter.ASOB_S, null);
-    assertEquals(1.337, weather.getAsob_s()); // value does not change, when null
+    assertEquals(1.337, weather.getAsobS()); // value does not change, when null
     weather.setParameter(Parameter.ASOB_S, asob_s);
     assertEquals(generateWeatherEntity(), weather); // no other values should have changed
     weather.setParameter(Parameter.U_10M, 4.2);
-    assertEquals(4.2, weather.getU_10m()); // value changed for single level values
+    assertEquals(4.2, weather.getU10m()); // value changed for single level values
     weather.setParameter(Parameter.U_216M, 2.4);
-    assertEquals(2.4, weather.getU_216m()); // value changed for multi level values
+    assertEquals(2.4, weather.getU216m()); // value changed for multi level values
   }
 
   @Test
@@ -180,9 +180,9 @@ public class ICONWeatherModelTest {
     assertEquals(
         weather, defaultWeather); // don't (really) interpolate when interpolationRatio is 0
     weather.interpolateParameter(Parameter.ALBEDO, 1.0, 1.337);
-    assertEquals(1.337, weather.getAlb_rad()); // overwrite when interpolationRatio is 1
+    assertEquals(1.337, weather.getAlbRad()); // overwrite when interpolationRatio is 1
     weather.interpolateParameter(Parameter.ASOB_S, 0.5, 1.337);
-    assertEquals((asob_s + 1.337) / 2, weather.getAsob_s()); // 50 % old value, 50% new value
+    assertEquals((asob_s + 1.337) / 2, weather.getAsobS()); // 50 % old value, 50% new value
     weather.interpolateParameter(Parameter.Z0, 0.67, 100.0);
     assertEquals(z0 * (1 - 0.67) + 100 * 0.67, weather.getZ0()); // 33% old value, 66% new value
   }
@@ -192,32 +192,32 @@ public class ICONWeatherModelTest {
     ICONWeatherModel randWeather = generateRandomWeatherEntity();
     HashMap<String, Double> collectedParameterValues = collectParameterValues(weather, randWeather);
     weather.interpolateValues(randWeather, 0.5);
-    assertEquals(collectedParameterValues.get("alb_rad") / 2, weather.getAlb_rad());
-    assertEquals(collectedParameterValues.get("asob_s") / 2, weather.getAsob_s());
-    assertEquals(collectedParameterValues.get("aswdifd_s") / 2, weather.getAswdifd_s());
-    assertEquals(collectedParameterValues.get("aswdifu_s") / 2, weather.getAswdifu_s());
-    assertEquals(collectedParameterValues.get("aswdirs_s") / 2, weather.getAswdirs_s());
-    assertEquals(collectedParameterValues.get("sobs_rad") / 2, weather.getSobs_rad());
-    assertEquals(collectedParameterValues.get("p_20m") / 2, weather.getP_20m());
-    assertEquals(collectedParameterValues.get("p_65m") / 2, weather.getP_65m());
-    assertEquals(collectedParameterValues.get("p_131m") / 2, weather.getP_131m());
-    assertEquals(collectedParameterValues.get("t_131m") / 2, weather.getT_131m());
-    assertEquals(collectedParameterValues.get("t_2m") / 2, weather.getT_2m());
-    assertEquals(collectedParameterValues.get("t_g") / 2, weather.getT_g());
-    assertEquals(collectedParameterValues.get("u_10m") / 2, weather.getU_10m());
-    assertEquals(collectedParameterValues.get("u_131m") / 2, weather.getU_131m());
-    assertEquals(collectedParameterValues.get("u_20m") / 2, weather.getU_20m());
-    assertEquals(collectedParameterValues.get("u_216m") / 2, weather.getU_216m());
-    assertEquals(collectedParameterValues.get("u_65m") / 2, weather.getU_65m());
-    assertEquals(collectedParameterValues.get("v_10m") / 2, weather.getV_10m());
-    assertEquals(collectedParameterValues.get("v_131m") / 2, weather.getV_131m());
-    assertEquals(collectedParameterValues.get("v_20m") / 2, weather.getV_20m());
-    assertEquals(collectedParameterValues.get("v_216m") / 2, weather.getV_216m());
-    assertEquals(collectedParameterValues.get("v_65m") / 2, weather.getV_65m());
-    assertEquals(collectedParameterValues.get("w_131m") / 2, weather.getW_131m());
-    assertEquals(collectedParameterValues.get("w_20m") / 2, weather.getW_20m());
-    assertEquals(collectedParameterValues.get("w_216m") / 2, weather.getW_216m());
-    assertEquals(collectedParameterValues.get("w_65m") / 2, weather.getW_65m());
+    assertEquals(collectedParameterValues.get("alb_rad") / 2, weather.getAlbRad());
+    assertEquals(collectedParameterValues.get("asob_s") / 2, weather.getAsobS());
+    assertEquals(collectedParameterValues.get("aswdifd_s") / 2, weather.getAswdifdS());
+    assertEquals(collectedParameterValues.get("aswdifu_s") / 2, weather.getAswdifuS());
+    assertEquals(collectedParameterValues.get("aswdirs_s") / 2, weather.getAswdirS());
+    assertEquals(collectedParameterValues.get("sobs_rad") / 2, weather.getSobsRad());
+    assertEquals(collectedParameterValues.get("p_20m") / 2, weather.getP20m());
+    assertEquals(collectedParameterValues.get("p_65m") / 2, weather.getP65m());
+    assertEquals(collectedParameterValues.get("p_131m") / 2, weather.getP131m());
+    assertEquals(collectedParameterValues.get("t_131m") / 2, weather.getT131m());
+    assertEquals(collectedParameterValues.get("t_2m") / 2, weather.getT2m());
+    assertEquals(collectedParameterValues.get("t_g") / 2, weather.getTG());
+    assertEquals(collectedParameterValues.get("u_10m") / 2, weather.getU10m());
+    assertEquals(collectedParameterValues.get("u_131m") / 2, weather.getU131m());
+    assertEquals(collectedParameterValues.get("u_20m") / 2, weather.getU20m());
+    assertEquals(collectedParameterValues.get("u_216m") / 2, weather.getU216m());
+    assertEquals(collectedParameterValues.get("u_65m") / 2, weather.getU65m());
+    assertEquals(collectedParameterValues.get("v_10m") / 2, weather.getV10m());
+    assertEquals(collectedParameterValues.get("v_131m") / 2, weather.getV131m());
+    assertEquals(collectedParameterValues.get("v_20m") / 2, weather.getV20m());
+    assertEquals(collectedParameterValues.get("v_216m") / 2, weather.getV216m());
+    assertEquals(collectedParameterValues.get("v_65m") / 2, weather.getV65m());
+    assertEquals(collectedParameterValues.get("w_131m") / 2, weather.getW131m());
+    assertEquals(collectedParameterValues.get("w_20m") / 2, weather.getW20m());
+    assertEquals(collectedParameterValues.get("w_216m") / 2, weather.getW216m());
+    assertEquals(collectedParameterValues.get("w_65m") / 2, weather.getW65m());
     assertEquals(collectedParameterValues.get("z0") / 2, weather.getZ0());
   }
 
@@ -267,32 +267,32 @@ public class ICONWeatherModelTest {
     ICONWeatherModel randEntity = new ICONWeatherModel();
     double min = -200d;
     double max = 200d;
-    randEntity.setAlb_rad((Math.random() * ((max - min) + 1) + min));
-    randEntity.setAsob_s((Math.random() * ((max - min) + 1) + min));
-    randEntity.setAswdifd_s((Math.random() * ((max - min) + 1) + min));
-    randEntity.setAswdifu_s((Math.random() * ((max - min) + 1) + min));
-    randEntity.setAswdirs_s((Math.random() * ((max - min) + 1) + min));
-    randEntity.setSobs_rad((Math.random() * ((max - min) + 1) + min));
-    randEntity.setP_20m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setP_65m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setP_131m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setT_131m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setT_2m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setT_g((Math.random() * ((max - min) + 1) + min));
-    randEntity.setU_10m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setU_131m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setU_20m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setU_216m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setU_65m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setV_10m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setV_131m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setV_20m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setV_216m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setV_65m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setW_131m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setW_20m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setW_216m((Math.random() * ((max - min) + 1) + min));
-    randEntity.setW_65m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setAlbRad((Math.random() * ((max - min) + 1) + min));
+    randEntity.setAsobS((Math.random() * ((max - min) + 1) + min));
+    randEntity.setAswdifdS((Math.random() * ((max - min) + 1) + min));
+    randEntity.setAswdifuS((Math.random() * ((max - min) + 1) + min));
+    randEntity.setAswdirS((Math.random() * ((max - min) + 1) + min));
+    randEntity.setSobsRad((Math.random() * ((max - min) + 1) + min));
+    randEntity.setP20m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setP65m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setP131m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setT131m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setT2m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setTG((Math.random() * ((max - min) + 1) + min));
+    randEntity.setU10m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setU131m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setU20m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setU216m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setU65m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setV10m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setV131m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setV20m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setV216m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setV65m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setW131m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setW20m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setW216m((Math.random() * ((max - min) + 1) + min));
+    randEntity.setW65m((Math.random() * ((max - min) + 1) + min));
     randEntity.setZ0((Math.random() * ((max - min) + 1) + min));
     return randEntity;
   }
@@ -327,32 +327,32 @@ public class ICONWeatherModelTest {
     map.put("w_65m", 0.0);
     map.put("z0", 0.0);
     for (ICONWeatherModel entity : entities) {
-      map.put("alb_rad", map.get("alb_rad") + entity.getAlb_rad());
-      map.put("asob_s", map.get("asob_s") + entity.getAsob_s());
-      map.put("aswdifd_s", map.get("aswdifd_s") + entity.getAswdifd_s());
-      map.put("aswdifu_s", map.get("aswdifu_s") + entity.getAswdifu_s());
-      map.put("aswdirs_s", map.get("aswdirs_s") + entity.getAswdirs_s());
-      map.put("sobs_rad", map.get("sobs_rad") + entity.getSobs_rad());
-      map.put("p_20m", map.get("p_20m") + entity.getP_20m());
-      map.put("p_65m", map.get("p_65m") + entity.getP_65m());
-      map.put("p_131m", map.get("p_131m") + entity.getP_131m());
-      map.put("t_131m", map.get("t_131m") + entity.getT_131m());
-      map.put("t_2m", map.get("t_2m") + entity.getT_2m());
-      map.put("t_g", map.get("t_g") + entity.getT_g());
-      map.put("u_10m", map.get("u_10m") + entity.getU_10m());
-      map.put("u_131m", map.get("u_131m") + entity.getU_131m());
-      map.put("u_20m", map.get("u_20m") + entity.getU_20m());
-      map.put("u_216m", map.get("u_216m") + entity.getU_216m());
-      map.put("u_65m", map.get("u_65m") + entity.getU_65m());
-      map.put("v_10m", map.get("v_10m") + entity.getV_10m());
-      map.put("v_131m", map.get("v_131m") + entity.getV_131m());
-      map.put("v_20m", map.get("v_20m") + entity.getV_20m());
-      map.put("v_216m", map.get("v_216m") + entity.getV_216m());
-      map.put("v_65m", map.get("v_65m") + entity.getV_65m());
-      map.put("w_131m", map.get("w_131m") + entity.getW_131m());
-      map.put("w_20m", map.get("w_20m") + entity.getW_20m());
-      map.put("w_216m", map.get("w_216m") + entity.getW_216m());
-      map.put("w_65m", map.get("w_65m") + entity.getW_65m());
+      map.put("alb_rad", map.get("alb_rad") + entity.getAlbRad());
+      map.put("asob_s", map.get("asob_s") + entity.getAsobS());
+      map.put("aswdifd_s", map.get("aswdifd_s") + entity.getAswdifdS());
+      map.put("aswdifu_s", map.get("aswdifu_s") + entity.getAswdifuS());
+      map.put("aswdirs_s", map.get("aswdirs_s") + entity.getAswdirS());
+      map.put("sobs_rad", map.get("sobs_rad") + entity.getSobsRad());
+      map.put("p_20m", map.get("p_20m") + entity.getP20m());
+      map.put("p_65m", map.get("p_65m") + entity.getP65m());
+      map.put("p_131m", map.get("p_131m") + entity.getP131m());
+      map.put("t_131m", map.get("t_131m") + entity.getT131m());
+      map.put("t_2m", map.get("t_2m") + entity.getT2m());
+      map.put("t_g", map.get("t_g") + entity.getTG());
+      map.put("u_10m", map.get("u_10m") + entity.getU10m());
+      map.put("u_131m", map.get("u_131m") + entity.getU131m());
+      map.put("u_20m", map.get("u_20m") + entity.getU20m());
+      map.put("u_216m", map.get("u_216m") + entity.getU216m());
+      map.put("u_65m", map.get("u_65m") + entity.getU65m());
+      map.put("v_10m", map.get("v_10m") + entity.getV10m());
+      map.put("v_131m", map.get("v_131m") + entity.getV131m());
+      map.put("v_20m", map.get("v_20m") + entity.getV20m());
+      map.put("v_216m", map.get("v_216m") + entity.getV216m());
+      map.put("v_65m", map.get("v_65m") + entity.getV65m());
+      map.put("w_131m", map.get("w_131m") + entity.getW131m());
+      map.put("w_20m", map.get("w_20m") + entity.getW20m());
+      map.put("w_216m", map.get("w_216m") + entity.getW216m());
+      map.put("w_65m", map.get("w_65m") + entity.getW65m());
       map.put("z0", map.get("z0") + entity.getZ0());
     }
     return map;
@@ -422,32 +422,32 @@ public class ICONWeatherModelTest {
       ZonedDateTime date,
       CoordinateModel coordinate) {
     ICONWeatherModel newWeather = new ICONWeatherModel(date, coordinate);
-    newWeather.setAlb_rad(alb_rad);
-    newWeather.setAsob_s(asob_s);
-    newWeather.setAswdifd_s(aswdifd_s);
-    newWeather.setAswdifu_s(aswdifu_s);
-    newWeather.setAswdirs_s(aswdirs_s);
-    newWeather.setSobs_rad(sobs_rad);
-    newWeather.setP_20m(p_20m);
-    newWeather.setP_65m(p_65m);
-    newWeather.setP_131m(p_131m);
-    newWeather.setT_131m(t_131m);
-    newWeather.setT_2m(t_2m);
-    newWeather.setT_g(t_g);
-    newWeather.setU_10m(u_10m);
-    newWeather.setU_131m(u_131m);
-    newWeather.setU_20m(u_20m);
-    newWeather.setU_216m(u_216m);
-    newWeather.setU_65m(u_65m);
-    newWeather.setV_10m(v_10m);
-    newWeather.setV_131m(v_131m);
-    newWeather.setV_20m(v_20m);
-    newWeather.setV_216m(v_216m);
-    newWeather.setV_65m(v_65m);
-    newWeather.setW_131m(w_131m);
-    newWeather.setW_20m(w_20m);
-    newWeather.setW_216m(w_216m);
-    newWeather.setW_65m(w_65m);
+    newWeather.setAlbRad(alb_rad);
+    newWeather.setAsobS(asob_s);
+    newWeather.setAswdifdS(aswdifd_s);
+    newWeather.setAswdifuS(aswdifu_s);
+    newWeather.setAswdirS(aswdirs_s);
+    newWeather.setSobsRad(sobs_rad);
+    newWeather.setP20m(p_20m);
+    newWeather.setP65m(p_65m);
+    newWeather.setP131m(p_131m);
+    newWeather.setT131m(t_131m);
+    newWeather.setT2m(t_2m);
+    newWeather.setTG(t_g);
+    newWeather.setU10m(u_10m);
+    newWeather.setU131m(u_131m);
+    newWeather.setU20m(u_20m);
+    newWeather.setU216m(u_216m);
+    newWeather.setU65m(u_65m);
+    newWeather.setV10m(v_10m);
+    newWeather.setV131m(v_131m);
+    newWeather.setV20m(v_20m);
+    newWeather.setV216m(v_216m);
+    newWeather.setV65m(v_65m);
+    newWeather.setW131m(w_131m);
+    newWeather.setW20m(w_20m);
+    newWeather.setW216m(w_216m);
+    newWeather.setW65m(w_65m);
     newWeather.setZ0(z0);
     return newWeather;
   }

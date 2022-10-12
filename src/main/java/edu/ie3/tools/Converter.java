@@ -125,14 +125,14 @@ public class Converter implements Runnable {
       ZonedDateTime newestPossibleModelrun =
           (ZonedDateTime)
               dbController.execSingleResultNamedQuery(
-                  FileModel.NewestDownloadedModelrun, Collections.emptyList());
+                  FileModel.NEWEST_DOWNLOADED_MODELRUN, Collections.emptyList());
 
       // retrieves the starting modelrun ( = oldest modelrun where persisted==false or no converter
       // run info available)
       ZonedDateTime currentModelrun =
           (ZonedDateTime)
               dbController.execSingleResultNamedQuery(
-                  FileModel.OldestModelrunWithUnprocessedFiles, Collections.emptyList());
+                  FileModel.OLDEST_MODELRUN_WITH_UNPROCESSED_FILES, Collections.emptyList());
 
       if (currentModelrun != null) {
         coordinates = getCoordinates();
@@ -195,11 +195,11 @@ public class Converter implements Runnable {
               FileModel.class, FileModel.createFileName(currentModelrun, timestep, param));
       if (file != null) {
         files.add(file);
-        if (file.isSufficient_size() && (file.isValid_file() == null || file.isValid_file())) {
-          if (!file.isPersisted() && !file.isArchivefile_deleted() && !file.isDecompressed()) {
+        if (file.isSufficientSize() && (file.isValidFile() == null || file.isValidFile())) {
+          if (!file.isPersisted() && !file.isArchiveFileDeleted() && !file.isDecompressed()) {
             tasks.add(new Decompressor(file, folderpath));
           }
-        } else if (file.getDownload_fails() > 3
+        } else if (file.getDownloadFails() > 3
             || file.getModelrun().isBefore(ZonedDateTime.now().minusDays(1))) {
           if (edu.ie3.tools.Main.deleteDownloadedFiles) {
             logger.trace(
@@ -224,10 +224,10 @@ public class Converter implements Runnable {
     }
     files.forEach(
         file -> {
-          if (file.isDecompressed() && (file.isValid_file() == null || file.isValid_file()))
+          if (file.isDecompressed() && (file.isValidFile() == null || file.isValidFile()))
             parameterLevelToFile.put(file.getParameter(), file);
           else {
-            file.setValid_file(false);
+            file.setValidFile(false);
             fileStatusLogger.trace(
                 file.getName() + "  |  vff  |  valid_file = false  | Decompression failed");
           }
@@ -301,10 +301,10 @@ public class Converter implements Runnable {
 
         // update the file model information about the validity of the extractor result
         FileModel file = parameterLevelToFile.get(extractorResult.getParameter());
-        file.setValid_file(extractorResult.isValidFile());
+        file.setValidFile(extractorResult.isValidFile());
         fileStatusLogger.trace(
             file.getName()
-                + (Boolean.TRUE.equals(file.isValid_file())
+                + (Boolean.TRUE.equals(file.isValidFile())
                     ? "  |  vft  |  valid_file = true  | Extraction"
                     : "  |  vff  |  valid_file = false  | Extraction"));
 
@@ -377,7 +377,7 @@ public class Converter implements Runnable {
     for (Map.Entry<Parameter, FileModel> entry : parameterLevelToFile.entrySet()) {
       FileModel file = entry.getValue();
       double relAmountMissingCoordinates =
-          ((double) file.getMissing_coordinates()) / coordinates.size();
+          ((double) file.getMissingCoordinates()) / coordinates.size();
       if (relAmountMissingCoordinates < edu.ie3.tools.Main.faultTolerance) {
         file.setPersisted(true);
         fileStatusLogger.trace(file.getName() + "  |  pf   |  persisted = true  |  Validation");

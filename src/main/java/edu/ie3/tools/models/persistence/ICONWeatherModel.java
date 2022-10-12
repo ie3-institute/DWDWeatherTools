@@ -30,47 +30,47 @@ public class ICONWeatherModel implements Serializable {
 
   /** Albedo in % */
   @Column(name = "alb_rad")
-  private Double alb_rad;
+  private Double albRad;
 
   /** Net short-wave radiation flux at surface in W/m² */
   @Column(name = "asob_s")
-  private Double asob_s;
+  private Double asobS;
 
   /** Surface down solar diffuse radiation in W/m² */
   @Column(name = "aswdifd_s")
-  private Double aswdifd_s;
+  private Double aswdifdS;
 
   /** Surface up diffuse radiation in W/m² */
   @Column(name = "aswdifu_s")
-  private Double aswdifu_s;
+  private Double aswdifuS;
 
   /** Direct radiation in W/m² */
   @Column(name = "aswdir_s")
-  private Double aswdirs_s;
+  private Double aswdirS;
 
   /** Net short-wave radiation flux at surface (instantaneous) in W/m² */
   @Column(name = "sobs_rad")
-  private Double sobs_rad;
+  private Double sobsRad;
 
   /** Temperature at 131m above ground in K */
   @Column(name = "t_131m")
-  private Double t_131m;
+  private Double t131m;
 
   /** Temperature at 2m above ground in K */
   @Column(name = "t_2m")
-  private Double t_2m;
+  private Double t2m;
 
   /** Ground temperature in K */
   @Column(name = "t_g")
-  private Double t_g;
+  private Double tG;
 
   /** Zonal wind at 10m above ground in m/s */
   @Column(name = "u_10m")
-  private Double u_10m;
+  private Double u10m;
 
   /** Meridional wind at 10m above ground in m/s */
   @Column(name = "v_10m")
-  private Double v_10m;
+  private Double v10m;
 
   /** Surface roughness in m */
   @Column(name = "z0")
@@ -78,63 +78,63 @@ public class ICONWeatherModel implements Serializable {
 
   /** Pressure at 20m above ground in Pa */
   @Column(name = "p_20m")
-  private Double p_20m;
+  private Double p20m;
 
   /** Pressure at 65m above ground in Pa */
   @Column(name = "p_65m")
-  private Double p_65m;
+  private Double p65m;
 
   /** Pressure at 131m above ground in Pa */
   @Column(name = "p_131m")
-  private Double p_131m;
+  private Double p131m;
 
   /** Zonal wind at 20m above ground in m/s */
   @Column(name = "u_20m")
-  private Double u_20m;
+  private Double u20m;
 
   /** Meridional wind at 20m above ground in m/s */
   @Column(name = "v_20m")
-  private Double v_20m;
+  private Double v20m;
 
   /** Vertical wind at 20m above ground in m/s */
   @Column(name = "w_20m")
-  private Double w_20m;
+  private Double w20m;
 
   /** Zonal wind at 65m above ground in m/s */
   @Column(name = "u_65m")
-  private Double u_65m;
+  private Double u65m;
 
   /** Meridional wind at 65m above ground in m/s */
   @Column(name = "v_65m")
-  private Double v_65m;
+  private Double v65m;
 
   /** Vertical wind at 65m above ground in m/s */
   @Column(name = "w_65m")
-  private Double w_65m;
+  private Double w65m;
 
   /** Zonal wind at 131m above ground in m/s */
   @Column(name = "u_131m")
-  private Double u_131m;
+  private Double u131m;
 
   /** Meridional wind at 131m above ground in m/s */
   @Column(name = "v_131m")
-  private Double v_131m;
+  private Double v131m;
 
   /** Vertical wind at 131m above ground in m/s */
   @Column(name = "w_131m")
-  private Double w_131m;
+  private Double w131m;
 
   /** Zonal wind at 216m above ground in m/s */
   @Column(name = "u_216m")
-  private Double u_216m;
+  private Double u216m;
 
   /** Meridional wind at 216m above ground in m/s */
   @Column(name = "v_216m")
-  private Double v_216m;
+  private Double v216m;
 
   /** Vertical wind at 216m above ground in m/s */
   @Column(name = "w_216m")
-  private Double w_216m;
+  private Double w216m;
 
   public ICONWeatherModel() {}
 
@@ -170,16 +170,17 @@ public class ICONWeatherModel implements Serializable {
   }
 
   public static String getSQLUpsertStatement(
-      Collection<ICONWeatherModel> entities, String database_schema) {
+      Collection<ICONWeatherModel> entities, String databaseSchema) {
     StringBuilder upsertStatementBuilder = new StringBuilder();
-    upsertStatementBuilder.append(
-        "INSERT INTO "
-            + database_schema
-            + ".weather(\n"
-            + "\tdatum, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s, sobs_rad, p_20m, p_65m, p_131m, t_131m, t_2m, t_g, u_10m, u_131m, u_20m, u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, z0, coordinate_id)\n"
-            + "\t VALUES ");
+    upsertStatementBuilder
+        .append("INSERT INTO ")
+        .append(databaseSchema)
+        .append(".weather(\n")
+        .append(
+            "\tdatum, alb_rad, asob_s, aswdifd_s, aswdifu_s, aswdir_s, sobs_rad, p_20m, p_65m, p_131m, t_131m, t_2m, t_g, u_10m, u_131m, u_20m, u_216m, u_65m, v_10m, v_131m, v_20m, v_216m, v_65m, w_131m, w_20m, w_216m, w_65m, z0, coordinate_id)\n")
+        .append("\t VALUES ");
     entities.forEach(
-        entity -> upsertStatementBuilder.append(entity.getSQLInsertValuesString() + ", "));
+        entity -> upsertStatementBuilder.append(entity.getSQLInsertValuesString()).append(", "));
     int lastComma = upsertStatementBuilder.lastIndexOf(",");
     upsertStatementBuilder.deleteCharAt(lastComma);
     upsertStatementBuilder.append("ON CONFLICT (coordinate_id, datum) DO UPDATE \n" + "  SET ");
@@ -224,76 +225,76 @@ public class ICONWeatherModel implements Serializable {
     this.date = date;
   }
 
-  public Double getAlb_rad() {
-    return alb_rad;
+  public Double getAlbRad() {
+    return albRad;
   }
 
-  public void setAlb_rad(Double alb_rad) {
-    this.alb_rad = alb_rad;
+  public void setAlbRad(Double albRad) {
+    this.albRad = albRad;
   }
 
-  public Double getAsob_s() {
-    return asob_s;
+  public Double getAsobS() {
+    return asobS;
   }
 
-  public void setAsob_s(Double asob_s) {
-    this.asob_s = asob_s;
+  public void setAsobS(Double asobS) {
+    this.asobS = asobS;
   }
 
-  public Double getAswdifd_s() {
-    return aswdifd_s;
+  public Double getAswdifdS() {
+    return aswdifdS;
   }
 
-  public void setAswdifd_s(Double aswdifd_s) {
-    this.aswdifd_s = aswdifd_s;
+  public void setAswdifdS(Double aswdifdS) {
+    this.aswdifdS = aswdifdS;
   }
 
-  public Double getAswdifu_s() {
-    return aswdifu_s;
+  public Double getAswdifuS() {
+    return aswdifuS;
   }
 
-  public void setAswdifu_s(Double aswdifu_s) {
-    this.aswdifu_s = aswdifu_s;
+  public void setAswdifuS(Double aswdifuS) {
+    this.aswdifuS = aswdifuS;
   }
 
-  public Double getAswdirs_s() {
-    return aswdirs_s;
+  public Double getAswdirS() {
+    return aswdirS;
   }
 
-  public void setAswdirs_s(Double aswdirs_s) {
-    this.aswdirs_s = aswdirs_s;
+  public void setAswdirS(Double aswdirsS) {
+    this.aswdirS = aswdirsS;
   }
 
-  public Double getT_2m() {
-    return t_2m;
+  public Double getT2m() {
+    return t2m;
   }
 
-  public void setT_2m(Double t_2m) {
-    this.t_2m = t_2m;
+  public void setT2m(Double t2m) {
+    this.t2m = t2m;
   }
 
-  public Double getT_g() {
-    return t_g;
+  public Double getTG() {
+    return tG;
   }
 
-  public void setT_g(Double t_g) {
-    this.t_g = t_g;
+  public void setTG(Double tG) {
+    this.tG = tG;
   }
 
-  public Double getU_10m() {
-    return u_10m;
+  public Double getU10m() {
+    return u10m;
   }
 
-  public void setU_10m(Double u_10m) {
-    this.u_10m = u_10m;
+  public void setU10m(Double u10m) {
+    this.u10m = u10m;
   }
 
-  public Double getV_10m() {
-    return v_10m;
+  public Double getV10m() {
+    return v10m;
   }
 
-  public void setV_10m(Double v_10m) {
-    this.v_10m = v_10m;
+  public void setV10m(Double v10m) {
+    this.v10m = v10m;
   }
 
   public Double getZ0() {
@@ -304,140 +305,140 @@ public class ICONWeatherModel implements Serializable {
     this.z0 = z0;
   }
 
-  public Double getU_20m() {
-    return u_20m;
+  public Double getU20m() {
+    return u20m;
   }
 
-  public void setU_20m(Double u_20m) {
-    this.u_20m = u_20m;
+  public void setU20m(Double u20m) {
+    this.u20m = u20m;
   }
 
-  public Double getV_20m() {
-    return v_20m;
+  public Double getV20m() {
+    return v20m;
   }
 
-  public void setV_20m(Double v_20m) {
-    this.v_20m = v_20m;
+  public void setV20m(Double v20m) {
+    this.v20m = v20m;
   }
 
-  public Double getW_20m() {
-    return w_20m;
+  public Double getW20m() {
+    return w20m;
   }
 
-  public void setW_20m(Double w_20m) {
-    this.w_20m = w_20m;
+  public void setW20m(Double w20m) {
+    this.w20m = w20m;
   }
 
-  public Double getU_65m() {
-    return u_65m;
+  public Double getU65m() {
+    return u65m;
   }
 
-  public void setU_65m(Double u_65m) {
-    this.u_65m = u_65m;
+  public void setU65m(Double u65m) {
+    this.u65m = u65m;
   }
 
-  public Double getV_65m() {
-    return v_65m;
+  public Double getV65m() {
+    return v65m;
   }
 
-  public void setV_65m(Double v_65m) {
-    this.v_65m = v_65m;
+  public void setV65m(Double v65m) {
+    this.v65m = v65m;
   }
 
-  public Double getW_65m() {
-    return w_65m;
+  public Double getW65m() {
+    return w65m;
   }
 
-  public void setW_65m(Double w_65m) {
-    this.w_65m = w_65m;
+  public void setW65m(Double w65m) {
+    this.w65m = w65m;
   }
 
-  public Double getU_216m() {
-    return u_216m;
+  public Double getU216m() {
+    return u216m;
   }
 
-  public void setU_216m(Double u_216m) {
-    this.u_216m = u_216m;
+  public void setU216m(Double u216m) {
+    this.u216m = u216m;
   }
 
-  public Double getV_216m() {
-    return v_216m;
+  public Double getV216m() {
+    return v216m;
   }
 
-  public void setV_216m(Double v_216m) {
-    this.v_216m = v_216m;
+  public void setV216m(Double v216m) {
+    this.v216m = v216m;
   }
 
-  public Double getW_216m() {
-    return w_216m;
+  public Double getW216m() {
+    return w216m;
   }
 
-  public void setW_216m(Double w_216m) {
-    this.w_216m = w_216m;
+  public void setW216m(Double w216m) {
+    this.w216m = w216m;
   }
 
-  public Double getU_131m() {
-    return u_131m;
+  public Double getU131m() {
+    return u131m;
   }
 
-  public void setU_131m(Double u_131m) {
-    this.u_131m = u_131m;
+  public void setU131m(Double u131m) {
+    this.u131m = u131m;
   }
 
-  public Double getV_131m() {
-    return v_131m;
+  public Double getV131m() {
+    return v131m;
   }
 
-  public void setV_131m(Double v_131m) {
-    this.v_131m = v_131m;
+  public void setV131m(Double v131m) {
+    this.v131m = v131m;
   }
 
-  public Double getW_131m() {
-    return w_131m;
+  public Double getW131m() {
+    return w131m;
   }
 
-  public void setW_131m(Double w_131m) {
-    this.w_131m = w_131m;
+  public void setW131m(Double w131m) {
+    this.w131m = w131m;
   }
 
-  public Double getSobs_rad() {
-    return sobs_rad;
+  public Double getSobsRad() {
+    return sobsRad;
   }
 
-  public void setSobs_rad(Double sobs_rad) {
-    this.sobs_rad = sobs_rad;
+  public void setSobsRad(Double sobsRad) {
+    this.sobsRad = sobsRad;
   }
 
-  public Double getT_131m() {
-    return t_131m;
+  public Double getT131m() {
+    return t131m;
   }
 
-  public void setT_131m(Double t_131m) {
-    this.t_131m = t_131m;
+  public void setT131m(Double t131m) {
+    this.t131m = t131m;
   }
 
-  public Double getP_20m() {
-    return p_20m;
+  public Double getP20m() {
+    return p20m;
   }
 
-  public void setP_20m(Double p_20m) {
-    this.p_20m = p_20m;
+  public void setP20m(Double p20m) {
+    this.p20m = p20m;
   }
 
-  public Double getP_65m() {
-    return p_65m;
+  public Double getP65m() {
+    return p65m;
   }
 
-  public void setP_65m(Double p_65m) {
-    this.p_65m = p_65m;
+  public void setP65m(Double p65m) {
+    this.p65m = p65m;
   }
 
-  public Double getP_131m() {
-    return p_131m;
+  public Double getP131m() {
+    return p131m;
   }
 
-  public void setP_131m(Double p_131m) {
-    this.p_131m = p_131m;
+  public void setP131m(Double p131m) {
+    this.p131m = p131m;
   }
 
   public void setParameter(Parameter param, Double value) {
@@ -445,34 +446,34 @@ public class ICONWeatherModel implements Serializable {
     switch (param) {
         // Single Level Params
       case ALBEDO:
-        alb_rad = value;
+        albRad = value;
         break;
       case ASOB_S:
-        asob_s = value;
+        asobS = value;
         break;
       case DIFS_D:
-        aswdifd_s = value;
+        aswdifdS = value;
         break;
       case DIFS_U:
-        aswdifu_s = value;
+        aswdifuS = value;
         break;
       case DIRS:
-        aswdirs_s = value;
+        aswdirS = value;
         break;
       case SOBS_RAD:
-        sobs_rad = value;
+        sobsRad = value;
         break;
       case T_2M:
-        t_2m = value;
+        t2m = value;
         break;
       case T_G:
-        t_g = value;
+        tG = value;
         break;
       case U_10M:
-        u_10m = value;
+        u10m = value;
         break;
       case V_10M:
-        v_10m = value;
+        v10m = value;
         break;
       case Z0:
         z0 = value;
@@ -480,56 +481,56 @@ public class ICONWeatherModel implements Serializable {
 
         // Matrix Level Params
       case P_20M:
-        p_20m = value;
+        p20m = value;
         break;
       case P_65M:
-        p_65m = value;
+        p65m = value;
         break;
       case P_131M:
-        p_131m = value;
+        p131m = value;
         break;
 
       case T_131M:
-        t_131m = value;
+        t131m = value;
         break;
 
       case U_20M:
-        u_20m = value;
+        u20m = value;
         break;
       case U_65M:
-        u_65m = value;
+        u65m = value;
         break;
       case U_131M:
-        u_131m = value;
+        u131m = value;
         break;
       case U_216M:
-        u_216m = value;
+        u216m = value;
         break;
 
       case V_20M:
-        v_20m = value;
+        v20m = value;
         break;
       case V_65M:
-        v_65m = value;
+        v65m = value;
         break;
       case V_131M:
-        v_131m = value;
+        v131m = value;
         break;
       case V_216M:
-        v_216m = value;
+        v216m = value;
         break;
 
       case W_20M:
-        w_20m = value;
+        w20m = value;
         break;
       case W_65M:
-        w_65m = value;
+        w65m = value;
         break;
       case W_131M:
-        w_131m = value;
+        w131m = value;
         break;
       case W_216M:
-        w_216m = value;
+        w216m = value;
         break;
     }
   }
@@ -538,65 +539,65 @@ public class ICONWeatherModel implements Serializable {
     switch (param) {
         // Singlelevel Parameter
       case ALBEDO:
-        return alb_rad;
+        return albRad;
       case ASOB_S:
-        return asob_s;
+        return asobS;
       case DIFS_D:
-        return aswdifd_s;
+        return aswdifdS;
       case DIFS_U:
-        return aswdifu_s;
+        return aswdifuS;
       case DIRS:
-        return aswdirs_s;
+        return aswdirS;
       case SOBS_RAD:
-        return sobs_rad;
+        return sobsRad;
       case T_2M:
-        return t_2m;
+        return t2m;
       case T_G:
-        return t_g;
+        return tG;
       case U_10M:
-        return u_10m;
+        return u10m;
       case V_10M:
-        return v_10m;
+        return v10m;
       case Z0:
         return z0;
 
         // Multilevel parameters
       case U_20M:
-        return u_20m;
+        return u20m;
       case U_65M:
-        return u_65m;
+        return u65m;
       case U_131M:
-        return u_131m;
+        return u131m;
       case U_216M:
-        return u_216m;
+        return u216m;
 
       case P_20M:
-        return p_20m;
+        return p20m;
       case P_65M:
-        return p_65m;
+        return p65m;
       case P_131M:
-        return p_131m;
+        return p131m;
 
       case T_131M:
-        return t_131m;
+        return t131m;
 
       case V_20M:
-        return v_20m;
+        return v20m;
       case V_65M:
-        return v_65m;
+        return v65m;
       case V_131M:
-        return v_131m;
+        return v131m;
       case V_216M:
-        return v_216m;
+        return v216m;
 
       case W_20M:
-        return w_20m;
+        return w20m;
       case W_65M:
-        return w_65m;
+        return w65m;
       case W_131M:
-        return w_131m;
+        return w131m;
       case W_216M:
-        return w_216m;
+        return w216m;
 
       default:
         return null;
@@ -609,34 +610,34 @@ public class ICONWeatherModel implements Serializable {
     switch (param) {
         // Single Level Params
       case ALBEDO:
-        alb_rad = interpolationCalculation(alb_rad, value, interpolationRatio);
+        albRad = interpolationCalculation(albRad, value, interpolationRatio);
         break;
       case ASOB_S:
-        asob_s = interpolationCalculation(asob_s, value, interpolationRatio);
+        asobS = interpolationCalculation(asobS, value, interpolationRatio);
         break;
       case DIFS_D:
-        aswdifd_s = interpolationCalculation(aswdifd_s, value, interpolationRatio);
+        aswdifdS = interpolationCalculation(aswdifdS, value, interpolationRatio);
         break;
       case DIFS_U:
-        aswdifu_s = interpolationCalculation(aswdifu_s, value, interpolationRatio);
+        aswdifuS = interpolationCalculation(aswdifuS, value, interpolationRatio);
         break;
       case DIRS:
-        aswdirs_s = interpolationCalculation(aswdirs_s, value, interpolationRatio);
+        aswdirS = interpolationCalculation(aswdirS, value, interpolationRatio);
         break;
       case SOBS_RAD:
-        sobs_rad = interpolationCalculation(sobs_rad, value, interpolationRatio);
+        sobsRad = interpolationCalculation(sobsRad, value, interpolationRatio);
         break;
       case T_2M:
-        t_2m = interpolationCalculation(t_2m, value, interpolationRatio);
+        t2m = interpolationCalculation(t2m, value, interpolationRatio);
         break;
       case T_G:
-        t_g = interpolationCalculation(t_g, value, interpolationRatio);
+        tG = interpolationCalculation(tG, value, interpolationRatio);
         break;
       case U_10M:
-        u_10m = interpolationCalculation(u_10m, value, interpolationRatio);
+        u10m = interpolationCalculation(u10m, value, interpolationRatio);
         break;
       case V_10M:
-        v_10m = interpolationCalculation(v_10m, value, interpolationRatio);
+        v10m = interpolationCalculation(v10m, value, interpolationRatio);
         break;
       case Z0:
         z0 = interpolationCalculation(z0, value, interpolationRatio);
@@ -644,56 +645,56 @@ public class ICONWeatherModel implements Serializable {
 
         // Matrix Type Params
       case P_20M:
-        p_20m = interpolationCalculation(p_20m, value, interpolationRatio);
+        p20m = interpolationCalculation(p20m, value, interpolationRatio);
         break;
       case P_65M:
-        p_65m = interpolationCalculation(p_65m, value, interpolationRatio);
+        p65m = interpolationCalculation(p65m, value, interpolationRatio);
         break;
       case P_131M:
-        p_131m = interpolationCalculation(p_131m, value, interpolationRatio);
+        p131m = interpolationCalculation(p131m, value, interpolationRatio);
         break;
 
       case T_131M:
-        t_131m = interpolationCalculation(t_131m, value, interpolationRatio);
+        t131m = interpolationCalculation(t131m, value, interpolationRatio);
         break;
 
       case U_20M:
-        u_20m = interpolationCalculation(u_20m, value, interpolationRatio);
+        u20m = interpolationCalculation(u20m, value, interpolationRatio);
         break;
       case U_65M:
-        u_65m = interpolationCalculation(u_65m, value, interpolationRatio);
+        u65m = interpolationCalculation(u65m, value, interpolationRatio);
         break;
       case U_131M:
-        u_131m = interpolationCalculation(u_131m, value, interpolationRatio);
+        u131m = interpolationCalculation(u131m, value, interpolationRatio);
         break;
       case U_216M:
-        u_216m = interpolationCalculation(u_216m, value, interpolationRatio);
+        u216m = interpolationCalculation(u216m, value, interpolationRatio);
         break;
 
       case V_20M:
-        v_20m = interpolationCalculation(v_20m, value, interpolationRatio);
+        v20m = interpolationCalculation(v20m, value, interpolationRatio);
         break;
       case V_65M:
-        v_65m = interpolationCalculation(v_65m, value, interpolationRatio);
+        v65m = interpolationCalculation(v65m, value, interpolationRatio);
         break;
       case V_131M:
-        v_131m = interpolationCalculation(v_131m, value, interpolationRatio);
+        v131m = interpolationCalculation(v131m, value, interpolationRatio);
         break;
       case V_216M:
-        v_216m = interpolationCalculation(v_216m, value, interpolationRatio);
+        v216m = interpolationCalculation(v216m, value, interpolationRatio);
         break;
 
       case W_20M:
-        w_20m = interpolationCalculation(w_20m, value, interpolationRatio);
+        w20m = interpolationCalculation(w20m, value, interpolationRatio);
         break;
       case W_65M:
-        w_65m = interpolationCalculation(w_65m, value, interpolationRatio);
+        w65m = interpolationCalculation(w65m, value, interpolationRatio);
         break;
       case W_131M:
-        w_131m = interpolationCalculation(w_131m, value, interpolationRatio);
+        w131m = interpolationCalculation(w131m, value, interpolationRatio);
         break;
       case W_216M:
-        w_216m = interpolationCalculation(w_216m, value, interpolationRatio);
+        w216m = interpolationCalculation(w216m, value, interpolationRatio);
         break;
     }
   }
@@ -721,32 +722,32 @@ public class ICONWeatherModel implements Serializable {
   public String getSQLInsertValuesString() {
     String insertValues = "(";
     insertValues += "'" + ConfigurationParameters.SQL_FORMATTER(date) + "', ";
-    insertValues += alb_rad + ", ";
-    insertValues += asob_s + ", ";
-    insertValues += aswdifd_s + ", ";
-    insertValues += aswdifu_s + ", ";
-    insertValues += aswdirs_s + ", ";
-    insertValues += sobs_rad + ", ";
-    insertValues += p_20m + ", ";
-    insertValues += p_65m + ", ";
-    insertValues += p_131m + ", ";
-    insertValues += t_131m + ", ";
-    insertValues += t_2m + ", ";
-    insertValues += t_g + ", ";
-    insertValues += u_10m + ", ";
-    insertValues += u_131m + ", ";
-    insertValues += u_20m + ", ";
-    insertValues += u_216m + ", ";
-    insertValues += u_65m + ", ";
-    insertValues += v_10m + ", ";
-    insertValues += v_131m + ", ";
-    insertValues += v_20m + ", ";
-    insertValues += v_216m + ", ";
-    insertValues += v_65m + ", ";
-    insertValues += w_131m + ", ";
-    insertValues += w_20m + ", ";
-    insertValues += w_216m + ", ";
-    insertValues += w_65m + ", ";
+    insertValues += albRad + ", ";
+    insertValues += asobS + ", ";
+    insertValues += aswdifdS + ", ";
+    insertValues += aswdifuS + ", ";
+    insertValues += aswdirS + ", ";
+    insertValues += sobsRad + ", ";
+    insertValues += p20m + ", ";
+    insertValues += p65m + ", ";
+    insertValues += p131m + ", ";
+    insertValues += t131m + ", ";
+    insertValues += t2m + ", ";
+    insertValues += tG + ", ";
+    insertValues += u10m + ", ";
+    insertValues += u131m + ", ";
+    insertValues += u20m + ", ";
+    insertValues += u216m + ", ";
+    insertValues += u65m + ", ";
+    insertValues += v10m + ", ";
+    insertValues += v131m + ", ";
+    insertValues += v20m + ", ";
+    insertValues += v216m + ", ";
+    insertValues += v65m + ", ";
+    insertValues += w131m + ", ";
+    insertValues += w20m + ", ";
+    insertValues += w216m + ", ";
+    insertValues += w65m + ", ";
     insertValues += z0 + ", ";
     insertValues += coordinate.getId();
     insertValues += ")";
@@ -758,15 +759,13 @@ public class ICONWeatherModel implements Serializable {
    * refer to:
    * https://stackoverflow.com/questions/3107044/preparedstatement-with-list-of-parameters-in-a-in-clause
    */
-  public static String getPSQLFindString(String database_schema) {
-    String query =
-        "SELECT * FROM "
-            + database_schema
-            + ".weather w JOIN "
-            + database_schema
-            + ".icon_coordinates c ON w.coordinate_id = c.id "
-            + "WHERE datum=? AND coordinate_id = ANY(?);";
-    return query;
+  public static String getPSQLFindString(String databaseSchema) {
+    return "SELECT * FROM "
+        + databaseSchema
+        + ".weather w JOIN "
+        + databaseSchema
+        + ".icon_coordinates c ON w.coordinate_id = c.id "
+        + "WHERE datum=? AND coordinate_id = ANY(?);";
   }
 
   @Override
@@ -776,33 +775,33 @@ public class ICONWeatherModel implements Serializable {
     ICONWeatherModel that = (ICONWeatherModel) o;
     return Objects.equals(date, that.date)
         && Objects.equals(coordinate, that.coordinate)
-        && Objects.equals(alb_rad, that.alb_rad)
-        && Objects.equals(asob_s, that.asob_s)
-        && Objects.equals(aswdifd_s, that.aswdifd_s)
-        && Objects.equals(aswdifu_s, that.aswdifu_s)
-        && Objects.equals(aswdirs_s, that.aswdirs_s)
-        && Objects.equals(sobs_rad, that.sobs_rad)
-        && Objects.equals(p_20m, that.p_20m)
-        && Objects.equals(p_65m, that.p_65m)
-        && Objects.equals(p_131m, that.p_131m)
-        && Objects.equals(t_131m, that.t_131m)
-        && Objects.equals(t_2m, that.t_2m)
-        && Objects.equals(t_g, that.t_g)
-        && Objects.equals(u_10m, that.u_10m)
-        && Objects.equals(v_10m, that.v_10m)
+        && Objects.equals(albRad, that.albRad)
+        && Objects.equals(asobS, that.asobS)
+        && Objects.equals(aswdifdS, that.aswdifdS)
+        && Objects.equals(aswdifuS, that.aswdifuS)
+        && Objects.equals(aswdirS, that.aswdirS)
+        && Objects.equals(sobsRad, that.sobsRad)
+        && Objects.equals(p20m, that.p20m)
+        && Objects.equals(p65m, that.p65m)
+        && Objects.equals(p131m, that.p131m)
+        && Objects.equals(t131m, that.t131m)
+        && Objects.equals(t2m, that.t2m)
+        && Objects.equals(tG, that.tG)
+        && Objects.equals(u10m, that.u10m)
+        && Objects.equals(v10m, that.v10m)
         && Objects.equals(z0, that.z0)
-        && Objects.equals(u_20m, that.u_20m)
-        && Objects.equals(v_20m, that.v_20m)
-        && Objects.equals(w_20m, that.w_20m)
-        && Objects.equals(u_65m, that.u_65m)
-        && Objects.equals(v_65m, that.v_65m)
-        && Objects.equals(w_65m, that.w_65m)
-        && Objects.equals(u_131m, that.u_131m)
-        && Objects.equals(v_131m, that.v_131m)
-        && Objects.equals(w_131m, that.w_131m)
-        && Objects.equals(u_216m, that.u_216m)
-        && Objects.equals(v_216m, that.v_216m)
-        && Objects.equals(w_216m, that.w_216m);
+        && Objects.equals(u20m, that.u20m)
+        && Objects.equals(v20m, that.v20m)
+        && Objects.equals(w20m, that.w20m)
+        && Objects.equals(u65m, that.u65m)
+        && Objects.equals(v65m, that.v65m)
+        && Objects.equals(w65m, that.w65m)
+        && Objects.equals(u131m, that.u131m)
+        && Objects.equals(v131m, that.v131m)
+        && Objects.equals(w131m, that.w131m)
+        && Objects.equals(u216m, that.u216m)
+        && Objects.equals(v216m, that.v216m)
+        && Objects.equals(w216m, that.w216m);
   }
 
   @Override
@@ -818,59 +817,59 @@ public class ICONWeatherModel implements Serializable {
         + "\n, coordinate="
         + coordinate
         + ", alb_rad="
-        + alb_rad
+        + albRad
         + ", asob_s="
-        + asob_s
+        + asobS
         + ", aswdifd_s="
-        + aswdifd_s
+        + aswdifdS
         + ", aswdifu_s="
-        + aswdifu_s
+        + aswdifuS
         + ", aswdirs_s="
-        + aswdirs_s
+        + aswdirS
         + ", sobs_rad="
-        + sobs_rad
+        + sobsRad
         + ", t_131m="
-        + t_131m
+        + t131m
         + ", t_2m="
-        + t_2m
+        + t2m
         + ", t_g="
-        + t_g
+        + tG
         + ", u_10m="
-        + u_10m
+        + u10m
         + ", v_10m="
-        + v_10m
+        + v10m
         + ", z0="
         + z0
         + ", p_20m="
-        + p_20m
+        + p20m
         + ", p_65m="
-        + p_65m
+        + p65m
         + ", p_131m="
-        + p_131m
+        + p131m
         + ", u_20m="
-        + u_20m
+        + u20m
         + ", v_20m="
-        + v_20m
+        + v20m
         + ", w_20m="
-        + w_20m
+        + w20m
         + ", u_65m="
-        + u_65m
+        + u65m
         + ", v_65m="
-        + v_65m
+        + v65m
         + ", w_65m="
-        + w_65m
+        + w65m
         + ", u_131m="
-        + u_131m
+        + u131m
         + ", v_131m="
-        + v_131m
+        + v131m
         + ", w_131m="
-        + w_131m
+        + w131m
         + ", u_216m="
-        + u_216m
+        + u216m
         + ", v_216m="
-        + v_216m
+        + v216m
         + ", w_216m="
-        + w_216m
+        + w216m
         + '}';
   }
 

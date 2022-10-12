@@ -39,17 +39,17 @@ import javax.persistence.*;
 public class FileModel implements Serializable {
 
   /** Selects newest (max) modelrun */
-  public static final String NewestDownloadedModelrun = "FileModel.NewestDownloadedModelrun";
+  public static final String NEWEST_DOWNLOADED_MODELRUN = "FileModel.NewestDownloadedModelrun";
   /**
    * Selects the oldest (min) modelrun, which has a sufficient file size, but hasn't been processed
    * yet
    */
-  public static final String OldestModelrunWithUnprocessedFiles =
+  public static final String OLDEST_MODELRUN_WITH_UNPROCESSED_FILES =
       "FileModel.OldestModelrunWithUnprocessedFiles";
   /** Selects files, that have been too small or invalid in previous runs */
-  public static final String FailedDownloads = "FileModel.FailedDownloads";
+  public static final String FAILED_DOWNLOADS = "FileModel.FailedDownloads";
   /** Selects files, that are invalid and not yet deleted */
-  public static final String InvalidFiles = "FileModel.InvalidFiles";
+  public static final String INVALID_FILES = "FileModel.InvalidFiles";
 
   public static final String PREFIX = "icon-eu_europe_regular-lat-lon_";
   public static final String PREFIX_SINGLE_LEVEL = PREFIX + "single-level_";
@@ -69,23 +69,30 @@ public class FileModel implements Serializable {
   @Enumerated(EnumType.STRING)
   private Parameter parameter;
 
-  @Column private int download_fails;
+  @Column(name = "download_fails")
+  private int downloadFails;
 
-  @Column private boolean sufficient_size;
+  @Column(name = "sufficient_size")
+  private boolean sufficientSize;
 
-  @Column private ZonedDateTime download_date;
+  @Column(name = "download_date")
+  private ZonedDateTime downloadDate;
 
   @Column private boolean decompressed;
 
-  @Column private int missing_coordinates;
+  @Column(name = "missing_coordinates")
+  private int missingCoordinates;
 
-  @Column private Boolean valid_file;
+  @Column(name = "valid_file")
+  private Boolean validFile;
 
   @Column private boolean persisted;
 
-  @Column private boolean archivefile_deleted;
+  @Column(name = "archivefile_deleted")
+  private boolean archiveFileDeleted;
 
-  @Column private boolean gribfile_deleted;
+  @Column(name = "gribfile_deleted")
+  private boolean isGribFileDeleted;
 
   public FileModel(ZonedDateTime modelrun, int timestep, Parameter parameter) {
     this.modelrun = modelrun;
@@ -134,32 +141,32 @@ public class FileModel implements Serializable {
     this.parameter = parameter;
   }
 
-  public int getDownload_fails() {
-    return download_fails;
+  public int getDownloadFails() {
+    return downloadFails;
   }
 
-  public void setDownload_fails(int download_fails) {
-    this.download_fails = download_fails;
+  public void setDownloadFails(int download_fails) {
+    this.downloadFails = download_fails;
   }
 
-  public void incrementDownload_fails() {
-    this.download_fails++;
+  public void incrementDownloadFails() {
+    this.downloadFails++;
   }
 
-  public boolean isSufficient_size() {
-    return sufficient_size;
+  public boolean isSufficientSize() {
+    return sufficientSize;
   }
 
-  public void setSufficient_size(boolean sufficient_size) {
-    this.sufficient_size = sufficient_size;
+  public void setSufficientSize(boolean sufficient_size) {
+    this.sufficientSize = sufficient_size;
   }
 
-  public ZonedDateTime getDownload_date() {
-    return download_date;
+  public ZonedDateTime getDownloadDate() {
+    return downloadDate;
   }
 
-  public void setDownload_date(ZonedDateTime download_date) {
-    this.download_date = download_date;
+  public void setDownloadDate(ZonedDateTime download_date) {
+    this.downloadDate = download_date;
   }
 
   public boolean isDecompressed() {
@@ -170,24 +177,24 @@ public class FileModel implements Serializable {
     this.decompressed = decompressed;
   }
 
-  public int getMissing_coordinates() {
-    return missing_coordinates;
+  public int getMissingCoordinates() {
+    return missingCoordinates;
   }
 
-  public void setMissing_coordinates(int missing_coordinates) {
-    this.missing_coordinates = missing_coordinates;
+  public void setMissingCoordinates(int missingCoordinates) {
+    this.missingCoordinates = missingCoordinates;
   }
 
-  public void addMissing_coordinate() {
-    this.missing_coordinates++;
+  public void addMissingCoordinate() {
+    this.missingCoordinates++;
   }
 
-  public Boolean isValid_file() {
-    return valid_file;
+  public Boolean isValidFile() {
+    return validFile;
   }
 
-  public void setValid_file(Boolean valid_file) {
-    this.valid_file = valid_file;
+  public void setValidFile(Boolean valid_file) {
+    this.validFile = valid_file;
   }
 
   public boolean isPersisted() {
@@ -198,20 +205,20 @@ public class FileModel implements Serializable {
     this.persisted = persisted;
   }
 
-  public boolean isArchivefile_deleted() {
-    return archivefile_deleted;
+  public boolean isArchiveFileDeleted() {
+    return archiveFileDeleted;
   }
 
-  public void setArchivefile_deleted(boolean archivefile_deleted) {
-    this.archivefile_deleted = archivefile_deleted;
+  public void setArchiveFileDeleted(boolean archiveFileDeleted) {
+    this.archiveFileDeleted = archiveFileDeleted;
   }
 
-  public boolean isGribfile_deleted() {
-    return gribfile_deleted;
+  public boolean isGribFileDeleted() {
+    return isGribFileDeleted;
   }
 
-  public void setGribfile_deleted(boolean gribfile_deleted) {
-    this.gribfile_deleted = gribfile_deleted;
+  public void setGribFileDeleted(boolean isGribFileDeleted) {
+    this.isGribFileDeleted = isGribFileDeleted;
   }
 
   public void setModelrun(ZonedDateTime modelrun) {

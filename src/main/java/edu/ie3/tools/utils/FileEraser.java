@@ -44,11 +44,11 @@ public class FileEraser {
     // delete archive file
     if (file.isDecompressed()) {
       String filename = file.getBZ2FileName();
-      file.setArchivefile_deleted(eraseFile(fullDirectoryPath + filename));
+      file.setArchiveFileDeleted(eraseFile(fullDirectoryPath + filename));
       filestatusLogger.trace(
           file.getName()
               + "  |  ad"
-              + (file.isArchivefile_deleted()
+              + (file.isArchiveFileDeleted()
                   ? "t  |  archivefile_deleted = true"
                   : "f  |  archivefile_deleted = false")
               + "|  FileEraser");
@@ -56,14 +56,14 @@ public class FileEraser {
 
     // delete grib file
     if (file.isPersisted()
-        || (file.isValid_file() != null && !file.isValid_file())
-        || !file.isSufficient_size()) {
+        || (file.isValidFile() != null && !file.isValidFile())
+        || !file.isSufficientSize()) {
       String filename = file.getGRIB2FileName();
-      file.setGribfile_deleted(eraseFile(fullDirectoryPath + filename));
+      file.setGribFileDeleted(eraseFile(fullDirectoryPath + filename));
       filestatusLogger.trace(
           file.getName()
               + "  |  gd"
-              + (file.isGribfile_deleted()
+              + (file.isGribFileDeleted()
                   ? "t  |  gribfile_deleted = true"
                   : "f  |  gribfile_deleted = false")
               + "|  FileEraser");

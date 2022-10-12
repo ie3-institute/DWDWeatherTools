@@ -146,9 +146,9 @@ public class Extractor implements Callable<ExtractorResult> {
     // check if file exists in path
     File f = file.getGRIB22File(path);
     if (!f.exists()) {
-      file.setGribfile_deleted(true);
+      file.setGribFileDeleted(true);
       f = file.getBZ2File(path);
-      if (!f.exists()) file.setArchivefile_deleted(true);
+      if (!f.exists()) file.setArchiveFileDeleted(true);
       throw new IOException(
           "Could not find file " + file.getName() + " ( " + f.getAbsolutePath() + " )");
     }

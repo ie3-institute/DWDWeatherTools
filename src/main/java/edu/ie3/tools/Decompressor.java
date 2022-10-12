@@ -53,7 +53,7 @@ public class Decompressor implements Callable<Boolean> {
       Parameter parameter = file.getParameter();
       logger.warn(
           Converter.getFormattedTimestep(file) + "File not found for parameter " + parameter);
-      file.setArchivefile_deleted(true);
+      file.setArchiveFileDeleted(true);
       filestatusLogger.trace(
           file.getName() + "  |  adt  |  archivefile_deleted = true  |  File not Found");
 

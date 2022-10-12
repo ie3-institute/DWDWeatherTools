@@ -5,8 +5,8 @@ plugins {
 	id 'application' // creates a JVM executable
 	id 'maven-publish' // publish to a maven repo (local or mvn central, has to be defined)
 	id 'pmd' // code check, working on source code
-	id 'com.github.spotbugs' version '5.0.6' // code check, working on byte code
-	id 'com.diffplug.spotless' version '6.6.1'// code format
+	id 'com.github.spotbugs' version '5.0.7' // code check, working on byte code
+	id 'com.diffplug.spotless' version '6.7.0'// code format
 	id 'com.simonharrer.modernizer' version '2.1.0-1' // detect deprecated APIs
 	id 'com.github.onslip.gradle-one-jar' version '1.0.6' // pack a self contained jar
 	id 'jacoco' // java code coverage plugin
@@ -59,12 +59,12 @@ dependencies {
 
 	//JAXB (needed for hibernate, but not longer contained in JDK9+)
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
-	implementation 'com.sun.xml.bind:jaxb-core:3.0.2'
-	implementation 'com.sun.xml.bind:jaxb-impl:3.0.2'
+	implementation 'com.sun.xml.bind:jaxb-core:4.0.0'
+	implementation 'com.sun.xml.bind:jaxb-impl:4.0.0'
 	implementation 'javax.activation:activation:1.1.1'
 
 	//database
-	implementation 'org.postgresql:postgresql:42.3.4'
+	implementation 'org.postgresql:postgresql:42.3.6'
 	implementation 'javax.persistence:javax.persistence-api:2.2'
 
 	// logging
@@ -76,11 +76,11 @@ dependencies {
 	implementation 'org.jetbrains:annotations:23.0.0'
 	annotationProcessor "info.picocli:picocli-codegen:$picoliVersion"
 	implementation "info.picocli:picocli:$picoliVersion"
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 
 	//tests
 	testImplementation 'junit:junit:4.+'
-	testImplementation 'org.testcontainers:postgresql:1.17.1'
+	testImplementation 'org.testcontainers:postgresql:1.17.2'
 
 }
 

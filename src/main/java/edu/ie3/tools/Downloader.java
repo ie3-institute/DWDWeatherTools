@@ -43,7 +43,9 @@ public class Downloader implements Runnable {
     dbController = new DatabaseController(PERSISTENCE_UNIT_NAME, validateConnectionProperties());
   }
 
-  /** @return if a connection to given url could be established */
+  /**
+   * @return if a connection to given url could be established
+   */
   public static boolean isUrlReachable(String url) {
     HttpURLConnection.setFollowRedirects(false);
     HttpURLConnection con;

@@ -10,7 +10,7 @@ plugins {
 	id 'com.simonharrer.modernizer' version '2.1.0-1' // detect deprecated APIs
 	id 'com.github.onslip.gradle-one-jar' version '1.0.6' // pack a self contained jar
 	id 'jacoco' // java code coverage plugin
-	id "org.sonarqube" version "3.3" // sonarqube
+	id "org.sonarqube" version "4.0.0.2929" // sonarqube
 }
 
 ext {

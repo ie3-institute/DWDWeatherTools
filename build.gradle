@@ -80,7 +80,7 @@ dependencies {
 
 	//tests
 	testImplementation 'junit:junit:4.+'
-	testImplementation 'org.testcontainers:postgresql:1.17.2'
+	testImplementation 'org.testcontainers:postgresql:1.18.3'
 
 }
 

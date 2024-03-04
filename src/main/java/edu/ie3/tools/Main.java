@@ -63,12 +63,12 @@ public class Main {
 
   @CommandLine.Option(
       names = {"-convert_from"},
-      description = "Start datetime of conversion.")
+      description = "Start datetime of conversion. Format: yyyy-MM-dd HH:mm:ss")
   public static String convertFrom;
 
   @CommandLine.Option(
       names = {"-convert_until"},
-      description = "End datetime of conversion.")
+      description = "End datetime of conversion. Format: yyyy-MM-dd HH:mm:ss")
   public static String convertUntil;
 
   @CommandLine.Option(
